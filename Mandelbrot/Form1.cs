@@ -24,7 +24,23 @@ namespace Mandelbrot
             
         }
 
-    
+        public int julia(double x, double y, double x2,double y2,double m)
+        {
+            for (int i = 1; i <= iteration; i++)
+            {
+                double xtemp = x;
+                x = (x * x) - (y * y) + x2;
+
+                y = 2 * xtemp * y +y2;
+                if (betrag(x, x) > m)
+                {
+                    return (i % 19) * 40;
+
+
+                }
+            }
+            return 765;
+        }
 
         public int mandelbrot(double x, double y, double m)
         {
@@ -80,7 +96,8 @@ namespace Mandelbrot
                     Color newColor;
                     double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung / 10.0);
                     double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung / 10.0);
-                    int value = mandelbrot(xwert, ywert, 50);
+                    //int value = mandelbrot(xwert, ywert, 50);
+                    int value = julia(xwert, ywert, -0.6, 0.6, 50);
                     if (value > 510)
                     {
                         newColor = Color.FromArgb(255, 255, value - 510);
