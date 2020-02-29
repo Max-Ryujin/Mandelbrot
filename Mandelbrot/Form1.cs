@@ -13,6 +13,7 @@ namespace Mandelbrot
         double xverschiebung = -1000;
         double yverschiebung = -1000;
         int auflösung = 1000;
+        Boolean Fraktal = true;
         Bitmap map;
         public Form1()
         {
@@ -81,13 +82,31 @@ namespace Mandelbrot
             auflösung = int.Parse(textBox4.Text);
             map = new Bitmap(auflösung, auflösung);
             iteration = int.Parse(textBox5.Text);
+            Fraktal = true;
             paint();
         }
 
-       
-         public void paint()
+        private void button2_Click(object sender, EventArgs e)
         {
+            x = 0;
+            y = 0;
+            xmin = 0;
+            xmax = 99;
+            vergrößerung = int.Parse(textBox1.Text);
+            xverschiebung = Double.Parse(textBox2.Text);
+            yverschiebung = Double.Parse(textBox3.Text);
+            auflösung = int.Parse(textBox4.Text);
+            map = new Bitmap(auflösung, auflösung);
+            iteration = int.Parse(textBox5.Text);
+            Fraktal = false;
+            paint();
+        }
 
+        public void paint()
+        {
+            double cx, cy;
+            cx = Double.Parse(textBox6.Text);
+            cy = Double.Parse(textBox7.Text);
            
             for (x = xmin; x <= xmax; x++)
             {
@@ -96,8 +115,16 @@ namespace Mandelbrot
                     Color newColor;
                     double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung / 10.0);
                     double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung / 10.0);
-                    //int value = mandelbrot(xwert, ywert, 50);
-                    int value = julia(xwert, ywert, -0.6, 0.6, 50);
+                    int value;
+                    if (Fraktal)
+                    {
+                        value = mandelbrot(xwert, ywert, 50);
+                    }
+                    else
+                    {
+
+                        value = julia(xwert, ywert, cx, cy, 50);
+                    }
                     if (value > 510)
                     {
                         newColor = Color.FromArgb(255, 255, value - 510);
