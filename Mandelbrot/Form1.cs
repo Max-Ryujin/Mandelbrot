@@ -87,7 +87,7 @@ namespace Mandelbrot
                     }
                     else if (value > 255)
                     {
-                        newColor = Color.FromArgb(255, value - 254, 0);
+                        newColor = Color.FromArgb(255, value - 255, 0);
                     }
                     else
                     {
