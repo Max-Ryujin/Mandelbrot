@@ -107,9 +107,9 @@ namespace Mandelbrot
         public void paint()
         {
             double cx, cy;
-            cx = trackBar1.Value/100;
-            //cx = Double.Parse(textBox6.Text);
-            cy = Double.Parse(textBox7.Text);
+            cx = (trackBar1.Value/100.0);
+            cy = (trackBar2.Value / 100.0);
+          
            
             for (x = xmin; x <= xmax; x++)
             {
