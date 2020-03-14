@@ -122,6 +122,31 @@ namespace Mandelbrot
             paint();
         }
 
+        private void trackBar1_ValueChanged(object sender, EventArgs e)
+        {
+            label8.Text = trackBar1.Value / 100.0 + "";
+            label9.Text = trackBar2.Value / 100.0 + "";
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                x = 0;
+                y = 0;
+                xmin = 0;
+                xmax = 99;
+                vergrößerung = Double.Parse(textBox1.Text);
+                xverschiebung = Double.Parse(textBox2.Text);
+                yverschiebung = Double.Parse(textBox3.Text);
+                auflösung = int.Parse(textBox4.Text);
+                map = new Bitmap(auflösung, auflösung);
+                iteration = int.Parse(textBox5.Text);
+                Fraktalwahl = radioButton1.Checked;
+                paint();
+            }
+        }
+
         public void paint()
         {
             double cx, cy;

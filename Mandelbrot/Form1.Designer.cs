@@ -43,8 +43,12 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
@@ -170,6 +174,7 @@
             // 
             // trackBar1
             // 
+            this.trackBar1.AllowDrop = true;
             this.trackBar1.LargeChange = 1;
             this.trackBar1.Location = new System.Drawing.Point(2200, 697);
             this.trackBar1.Margin = new System.Windows.Forms.Padding(4);
@@ -179,6 +184,7 @@
             this.trackBar1.Size = new System.Drawing.Size(328, 90);
             this.trackBar1.TabIndex = 15;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // trackBar2
             // 
@@ -192,6 +198,7 @@
             this.trackBar2.Size = new System.Drawing.Size(328, 90);
             this.trackBar2.TabIndex = 16;
             this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBar2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // groupBox1
             // 
@@ -204,17 +211,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Fraktal";
             // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(99, 40);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(151, 29);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Mandelbrot";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
@@ -226,11 +222,62 @@
             this.radioButton2.Text = "Julia";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(99, 40);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(151, 29);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Mandelbrot";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(2071, 697);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(98, 25);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "Julia C X";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(2071, 770);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(99, 25);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Julia C Y";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(2552, 697);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(24, 25);
+            this.label8.TabIndex = 20;
+            this.label8.Text = "0";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(2552, 770);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(24, 25);
+            this.label9.TabIndex = 21;
+            this.label9.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(3028, 1856);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.trackBar1);
@@ -250,7 +297,7 @@
             this.Name = "Form1";
             this.Text = "Mandelbrot";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
@@ -280,6 +327,10 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
     }
 }
 
