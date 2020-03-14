@@ -9,11 +9,13 @@ namespace Mandelbrot
     {
         int x, y;
         int iteration = 100;
-        Double vergrößerung = 2000;
+        double vergrößerung = 1;
         double xverschiebung = 0;
         double yverschiebung = 0;
         int auflösung = 1000;
-        Boolean Fraktal = true;
+        Boolean Fraktalwahl = true;
+        int xmin = 0;
+        int xmax = 99;
         Bitmap map;
         public Form1()
         {
@@ -68,8 +70,7 @@ namespace Mandelbrot
         {
             return ((x* x) + (y* y));           
         }
-        int xmin = 0;
-        int xmax = 99;
+
         private void button1_Click(object sender, EventArgs e)
         {
             x = 0;
@@ -82,47 +83,42 @@ namespace Mandelbrot
             auflösung = int.Parse(textBox4.Text);
             map = new Bitmap(auflösung, auflösung);
             iteration = int.Parse(textBox5.Text);
-            Fraktal = true;
+            Fraktalwahl = radioButton1.Checked;
             paint();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            x = 0;
-            y = 0;
-            xmin = 0;
-            xmax = 99;
-            vergrößerung = int.Parse(textBox1.Text);
-            xverschiebung = Double.Parse(textBox2.Text);
-            yverschiebung = Double.Parse(textBox3.Text);
-            auflösung = int.Parse(textBox4.Text);
-            map = new Bitmap(auflösung, auflösung);
-            iteration = int.Parse(textBox5.Text);
-            Fraktal = false;
-            paint();
-           
         }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
-
             x = 0;
             y = 0;
             xmin = 0;
             xmax = 99;
-           
+
+            if (map == null) { return; }
 
             double xposition = ((e.Location.X - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
             double yposition = ((e.Location.Y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-           
-            xverschiebung += (xposition-xverschiebung);
-            yverschiebung += (yposition-yverschiebung);
+
+            xverschiebung += (xposition - xverschiebung);
+            yverschiebung += (yposition - yverschiebung);
             textBox2.Text = xverschiebung.ToString();
             textBox3.Text = yverschiebung.ToString();
-            iteration += 100;
-            vergrößerung *= 2;
+
+            if (e.Button.ToString() == "Left")
+            {
+
+
+                iteration += 100;
+                vergrößerung *= 2;
+            }
+            else
+            {
+                iteration -= 100;
+                vergrößerung /= 2;
+            }
             textBox5.Text = iteration.ToString();
             textBox1.Text = vergrößerung.ToString();
+
             paint();
         }
 
@@ -141,7 +137,7 @@ namespace Mandelbrot
                     double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
                     double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
                     int value;
-                    if (Fraktal)
+                    if (Fraktalwahl)
                     {
                         value = mandelbrot(xwert, ywert, 50);
                     }
