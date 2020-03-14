@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace Mandelbrot
@@ -9,9 +9,9 @@ namespace Mandelbrot
     {
         int x, y;
         int iteration = 100;
-        int vergrößerung = 2000;
-        double xverschiebung = -1000;
-        double yverschiebung = -1000;
+        Double vergrößerung = 2000;
+        double xverschiebung = 0;
+        double yverschiebung = 0;
         int auflösung = 1000;
         Boolean Fraktal = true;
         Bitmap map;
@@ -76,7 +76,7 @@ namespace Mandelbrot
             y = 0;
             xmin = 0;
             xmax = 99;
-            vergrößerung = int.Parse( textBox1.Text);
+            vergrößerung = Double.Parse( textBox1.Text);
             xverschiebung = Double.Parse(textBox2.Text);
             yverschiebung = Double.Parse(textBox3.Text);
             auflösung = int.Parse(textBox4.Text);
@@ -100,9 +100,31 @@ namespace Mandelbrot
             iteration = int.Parse(textBox5.Text);
             Fraktal = false;
             paint();
+           
         }
 
-      
+        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+
+            x = 0;
+            y = 0;
+            xmin = 0;
+            xmax = 99;
+           
+
+            double xposition = ((e.Location.X - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
+            double yposition = ((e.Location.Y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
+           
+            xverschiebung += (xposition-xverschiebung);
+            yverschiebung += (yposition-yverschiebung);
+            textBox2.Text = xverschiebung.ToString();
+            textBox3.Text = yverschiebung.ToString();
+            iteration += 100;
+            vergrößerung *= 2;
+            textBox5.Text = iteration.ToString();
+            textBox1.Text = vergrößerung.ToString();
+            paint();
+        }
 
         public void paint()
         {
@@ -116,8 +138,8 @@ namespace Mandelbrot
                 for (y = 0; y < map.Height; y++)
                 {
                     Color newColor;
-                    double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung / 10.0);
-                    double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung / 10.0);
+                    double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
+                    double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
                     int value;
                     if (Fraktal)
                     {
@@ -153,7 +175,11 @@ namespace Mandelbrot
 
             pictureBox1.Image = map;
             Refresh();
-            if (xmax < auflösung) paint();
+            if (xmax < auflösung) { paint(); }
+            else
+            {
+                map.Save("file.png", ImageFormat.Png);
+            }
         }
 
             
