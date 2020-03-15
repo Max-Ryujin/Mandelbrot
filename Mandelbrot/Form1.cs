@@ -16,6 +16,7 @@ namespace Mandelbrot
         Boolean Fraktalwahl = true;
         int xmin = 0;
         int xmax = 99;
+        int konvergenzradius = 50;
         Bitmap map;
         public Form1()
         {
@@ -57,13 +58,13 @@ namespace Mandelbrot
                 yy = 2 * xtemp * yy + y;
                 if (betrag(xx, yy) > m)
                 {
-                    return (i%19)*40;
+                    return i;
                     
                   
                 }
             }
            
-            return 765;
+            return -1;
         }
 
         public double betrag(double x, double y)
@@ -71,19 +72,25 @@ namespace Mandelbrot
             return ((x* x) + (y* y));           
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void setValues()
         {
             x = 0;
             y = 0;
             xmin = 0;
             xmax = 99;
-            vergrößerung = Double.Parse( textBox1.Text);
+            konvergenzradius = Int32.Parse(textBox6.Text);
+            vergrößerung = Double.Parse(textBox1.Text);
             xverschiebung = Double.Parse(textBox2.Text);
             yverschiebung = Double.Parse(textBox3.Text);
             auflösung = int.Parse(textBox4.Text);
             map = new Bitmap(auflösung, auflösung);
             iteration = int.Parse(textBox5.Text);
             Fraktalwahl = radioButton1.Checked;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            setValues();
             paint();
         }
 
@@ -99,8 +106,8 @@ namespace Mandelbrot
             double xposition = ((e.Location.X - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
             double yposition = ((e.Location.Y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
 
-            xverschiebung += (xposition - xverschiebung);
-            yverschiebung += (yposition - yverschiebung);
+            xverschiebung = (xposition );
+            yverschiebung = (yposition);
             textBox2.Text = xverschiebung.ToString();
             textBox3.Text = yverschiebung.ToString();
 
@@ -132,17 +139,7 @@ namespace Mandelbrot
         {
             if (e.KeyCode == Keys.Enter)
             {
-                x = 0;
-                y = 0;
-                xmin = 0;
-                xmax = 99;
-                vergrößerung = Double.Parse(textBox1.Text);
-                xverschiebung = Double.Parse(textBox2.Text);
-                yverschiebung = Double.Parse(textBox3.Text);
-                auflösung = int.Parse(textBox4.Text);
-                map = new Bitmap(auflösung, auflösung);
-                iteration = int.Parse(textBox5.Text);
-                Fraktalwahl = radioButton1.Checked;
+                setValues();
                 paint();
             }
         }
@@ -164,25 +161,15 @@ namespace Mandelbrot
                     int value;
                     if (Fraktalwahl)
                     {
-                        value = mandelbrot(xwert, ywert, 50);
+                        value = mandelbrot(xwert, ywert, konvergenzradius);
                     }
                     else
                     {
 
-                        value = julia(xwert, ywert, cx, cy, 50);
+                        value = julia(xwert, ywert, cx, cy, konvergenzradius);
                     }
-                    if (value > 510)
-                    {
-                        newColor = Color.FromArgb(255, 255, value - 510);
-                    }
-                    else if (value > 255)
-                    {
-                        newColor = Color.FromArgb(255, value - 255, 0);
-                    }
-                    else
-                    {
-                        newColor = Color.FromArgb(value, 0, 0);
-                    }
+                    newColor = calculateColor(value);
+
 
 
 
@@ -203,7 +190,48 @@ namespace Mandelbrot
             }
         }
 
-            
+        private Color calculateColor(int i)
+        {
+            if(i == -1)
+            {
+                if(radioButton3.Checked)
+                {
+                    return Color.FromArgb(0, 0, 0);
+                }
+                else
+                {
+                    return Color.FromArgb(255, 255, 255);
+                }
+            }
+            else
+            {
+                int newi;
+                if (radioButton5.Checked)
+                {
+                     newi = ((i % 230) * 3)+50;
+                }
+                else if(radioButton6.Checked)
+                {
+                     newi = ((i % 105) * 7) + 20;
+                }
+                else
+                {
+                     newi = ((i % 20) * 37) + 20;
+                }
+                    if (newi >510)
+                {
+                    return Color.FromArgb(newi - 510, 255, 255);
+                }
+                else if(newi > 255)
+                {
+                    return Color.FromArgb(0, newi - 255, 255);
+                }
+                else
+                {
+                    return Color.FromArgb(0, 0, newi);
+                }
+            }
+        }
         
         
     }   
