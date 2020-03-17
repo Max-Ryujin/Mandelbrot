@@ -3,6 +3,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
+
+
+
 namespace Mandelbrot
 {
     public partial class Form1 : Form
@@ -17,7 +20,9 @@ namespace Mandelbrot
         int xmin = 0;
         int xmax = 99;
         int konvergenzradius = 50;
+        
         Bitmap map;
+        
         public Form1()
         {
             InitializeComponent();
@@ -62,6 +67,8 @@ namespace Mandelbrot
                     
                   
                 }
+                
+
             }
            
             return -1;
@@ -232,7 +239,8 @@ namespace Mandelbrot
 
         private Color calculateColor(int i)
         {
-            if(i == -1)
+            // inside
+            if(i == -1) 
             {
                 if(radioButton3.Checked)
                 {
@@ -243,32 +251,123 @@ namespace Mandelbrot
                     return Color.FromArgb(255, 255, 255);
                 }
             }
+            //outside
             else
             {
-                int newi;
-                if (radioButton5.Checked)
+                // Absolut
+                if (radioButton8.Checked)
                 {
-                     newi = ((i % 230) * 3)+50;
+                    if (radioButton3.Checked)
+                    {
+                        return Color.FromArgb(255, 255, 255);
+                    }
+                    else
+                    {
+                        return Color.FromArgb(0, 0, 0);
+                    }
                 }
-                else if(radioButton6.Checked)
+                // Grün
+                else if (radioButton9.Checked)
                 {
-                     newi = ((i % 105) * 7) + 20;
+                    int newi;
+                    // Fein
+                    if (radioButton5.Checked)
+                    {
+                        newi = ((i % 230) * 3) + 50;
+                    }
+                    // Medium
+                    else if (radioButton6.Checked)
+                    {
+                        newi = ((i % 105) * 7) + 20;
+                    }
+                    //Grob
+                    else
+                    {
+                        newi = ((i % 20) * 37) + 20;
+                    }
+
+                    if (newi > 510)
+                    {
+                        return Color.FromArgb(255, 255, newi - 510);
+                    }
+                    else if (newi > 255)
+                    {
+                        return Color.FromArgb(newi - 255, 255, 0);
+                    }
+                    else
+                    {
+                        return Color.FromArgb(0, newi, 0);
+                    }
+                }
+                // Rot
+                else if (radioButton11.Checked)
+                {
+                    int newi;
+                    // Fein
+                    if (radioButton5.Checked)
+                    {
+                        newi = ((i % 230) * 3) + 50;
+                    }
+                    // Medium
+                    else if (radioButton6.Checked)
+                    {
+                        newi = ((i % 105) * 7) + 20;
+                    }
+                    //Grob
+                    else
+                    {
+                        newi = ((i % 20) * 37) + 20;
+                    }
+
+                    if (newi > 510)
+                    {
+                        return Color.FromArgb(255, 255, newi - 510);
+                    }
+                    else if (newi > 255)
+                    {
+                        return Color.FromArgb(255, newi - 255, 0);
+                    }
+                    else
+                    {
+                        return Color.FromArgb(newi,0 , 0);
+                    }
+                }
+                //blau
+                else if (radioButton10.Checked)
+                {
+                    int newi;
+                    // Fein
+                    if (radioButton5.Checked) 
+                    {
+                        newi = ((i % 230) * 3) + 50;
+                    }
+                    // Medium
+                    else if (radioButton6.Checked)
+                    {
+                        newi = ((i % 105) * 7) + 20;
+                    }
+                    //Grob
+                    else
+                    {
+                        newi = ((i % 20) * 37) + 20;
+                    }
+                    
+                    if (newi > 510)
+                    {
+                        return Color.FromArgb(newi - 510, 255, 255);
+                    }
+                    else if (newi > 255)
+                    {
+                        return Color.FromArgb(0, newi - 255, 255);
+                    }
+                    else
+                    {
+                        return Color.FromArgb(0, 0, newi);
+                    }
                 }
                 else
                 {
-                     newi = ((i % 20) * 37) + 20;
-                }
-                    if (newi >510)
-                {
-                    return Color.FromArgb(newi - 510, 255, 255);
-                }
-                else if(newi > 255)
-                {
-                    return Color.FromArgb(0, newi - 255, 255);
-                }
-                else
-                {
-                    return Color.FromArgb(0, 0, newi);
+                    return Color.Black;
                 }
             }
         }
