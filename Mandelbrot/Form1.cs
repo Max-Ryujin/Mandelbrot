@@ -12,7 +12,7 @@ namespace Mandelbrot
     {
         int x, y;
         int iteration = 100;
-        double vergrößerung = 1;
+        double vergrößerung = 2;
         double xverschiebung = 0;
         double yverschiebung = 0;
         int auflösung = 1000;
@@ -109,10 +109,15 @@ namespace Mandelbrot
             xmax = 99;
 
             if (map == null) { return; }
+            double locationY = e.Location.Y * (auflösung / 1000.0);
+            double locationX = e.Location.X * (auflösung / 1000.0);
 
-            double xposition = ((e.Location.X - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
-            double yposition = ((e.Location.Y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-
+            double xposition = ((locationX - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
+            double yposition = ((locationY - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
+            Console.WriteLine(e.Location.X);
+            Console.WriteLine(e.Location.Y);
+            Console.WriteLine(xposition);
+            Console.WriteLine(yposition);
             xverschiebung = (xposition );
             yverschiebung = (yposition);
             textBox2.Text = xverschiebung.ToString();
@@ -236,6 +241,7 @@ namespace Mandelbrot
             }
            
         }
+
 
         private Color calculateColor(int i)
         {
