@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using System.Threading;
 
 
 
@@ -16,6 +17,8 @@ namespace Mandelbrot
         double xverschiebung = 0;
         double yverschiebung = 0;
         int auflösung = 1000;
+        Thread th;
+        Boolean isCalculating = false;
         Boolean Fraktalwahl = true;
         int xmin = 0;
         int xmax = 99;
@@ -97,48 +100,60 @@ namespace Mandelbrot
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
             setValues();
-            paint();
+            if (!isCalculating)
+            {
+                isCalculating = true;
+
+                paint();
+                isCalculating = false;
+            }
         }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
-            x = 0;
-            y = 0;
-            xmin = 0;
-            xmax = 99;
-
-            if (map == null) { return; }
-            double locationY = e.Location.Y * (auflösung / 1000.0);
-            double locationX = e.Location.X * (auflösung / 1000.0);
-
-            double xposition = ((locationX - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
-            double yposition = ((locationY - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-            Console.WriteLine(e.Location.X);
-            Console.WriteLine(e.Location.Y);
-            Console.WriteLine(xposition);
-            Console.WriteLine(yposition);
-            xverschiebung = (xposition );
-            yverschiebung = (yposition);
-            textBox2.Text = xverschiebung.ToString();
-            textBox3.Text = yverschiebung.ToString();
-
-            if (e.Button.ToString() == "Left")
+            if (!isCalculating)
             {
+                isCalculating = true;
+                x = 0;
+                y = 0;
+                xmin = 0;
+                xmax = 99;
+
+                if (map == null) { return; }
+                double locationY = e.Location.Y * (auflösung / 1000.0);
+                double locationX = e.Location.X * (auflösung / 1000.0);
+
+                double xposition = ((locationX - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
+                double yposition = ((locationY - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
+                Console.WriteLine(e.Location.X);
+                Console.WriteLine(e.Location.Y);
+                Console.WriteLine(xposition);
+                Console.WriteLine(yposition);
+                xverschiebung = (xposition);
+                yverschiebung = (yposition);
+                textBox2.Text = xverschiebung.ToString();
+                textBox3.Text = yverschiebung.ToString();
+
+                if (e.Button.ToString() == "Left")
+                {
 
 
-                iteration += 100;
-                vergrößerung *= 2;
+                    iteration += 100;
+                    vergrößerung *= 2;
+                }
+                else
+                {
+                    iteration -= 100;
+                    vergrößerung /= 2;
+                }
+                textBox5.Text = iteration.ToString();
+                textBox1.Text = vergrößerung.ToString();
+
+                paint();
+                isCalculating = false;
             }
-            else
-            {
-                iteration -= 100;
-                vergrößerung /= 2;
-            }
-            textBox5.Text = iteration.ToString();
-            textBox1.Text = vergrößerung.ToString();
-
-            paint();
         }
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
@@ -241,7 +256,6 @@ namespace Mandelbrot
             }
            
         }
-
 
         private Color calculateColor(int i)
         {
