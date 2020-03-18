@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Threading;
+using System.ComponentModel;
 
 
 
@@ -23,64 +24,20 @@ namespace Mandelbrot
         int xmin = 0;
         int xmax = 99;
         int konvergenzradius = 50;
-        
+
         Bitmap map;
-        
+
         public Form1()
         {
             InitializeComponent();
         }
-       
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
         }
 
-        public int julia(double x, double y, double x2,double y2,double m)
-        {
-            for (int i = 1; i <= iteration; i++)
-            {
-                double xtemp = x;
-                x = (x * x) - (y * y) + x2;
 
-                y = 2 * xtemp * y +y2;
-                if (betrag(x, x) > m)
-                {
-                    return i;
-
-
-                }
-            }
-            return -1;
-        }
-
-        public int mandelbrot(double x, double y, double m)
-        {
-            double xx = 0;
-            double yy = 0;
-            for (int i = 1; i <= iteration; i++)
-            {
-                double xtemp = xx;
-                xx = (xx * xx) - (yy* yy) + x;          
-                
-                yy = 2 * xtemp * yy + y;
-                if (betrag(xx, yy) > m)
-                {
-                    return i;
-                    
-                  
-                }
-                
-
-            }
-           
-            return -1;
-        }
-
-        public double betrag(double x, double y)
-        {
-            return ((x* x) + (y* y));           
-        }
 
         private void setValues()
         {
@@ -100,120 +57,74 @@ namespace Mandelbrot
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+
             setValues();
-            if (!isCalculating)
-            {
-                isCalculating = true;
+            MapWorker worker = new MapWorker(xmin, xmax, auflösung, iteration, vergrößerung, xverschiebung, yverschiebung);
+            worker.RunWorkerCompleted += mapWorkerCompleted;
+            worker.RunWorkerAsync();
 
-                paint();
-                isCalculating = false;
-            }
         }
-
-        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (!isCalculating)
-            {
-                isCalculating = true;
-                x = 0;
-                y = 0;
-                xmin = 0;
-                xmax = 99;
-
-                if (map == null) { return; }
-                double locationY = e.Location.Y * (auflösung / 1000.0);
-                double locationX = e.Location.X * (auflösung / 1000.0);
-
-                double xposition = ((locationX - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
-                double yposition = ((locationY - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-                Console.WriteLine(e.Location.X);
-                Console.WriteLine(e.Location.Y);
-                Console.WriteLine(xposition);
-                Console.WriteLine(yposition);
-                xverschiebung = (xposition);
-                yverschiebung = (yposition);
-                textBox2.Text = xverschiebung.ToString();
-                textBox3.Text = yverschiebung.ToString();
-
-                if (e.Button.ToString() == "Left")
+        /*
+                private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
                 {
+                    if (!isCalculating)
+                    {
+                        isCalculating = true;
+                        x = 0;
+                        y = 0;
+                        xmin = 0;
+                        xmax = 99;
+
+                        if (map == null) { return; }
+                        double locationY = e.Location.Y * (auflösung / 1000.0);
+                        double locationX = e.Location.X * (auflösung / 1000.0);
+
+                        double xposition = ((locationX - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
+                        double yposition = ((locationY - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
+                        Console.WriteLine(e.Location.X);
+                        Console.WriteLine(e.Location.Y);
+                        Console.WriteLine(xposition);
+                        Console.WriteLine(yposition);
+                        xverschiebung = (xposition);
+                        yverschiebung = (yposition);
+                        textBox2.Text = xverschiebung.ToString();
+                        textBox3.Text = yverschiebung.ToString();
+
+                        if (e.Button.ToString() == "Left")
+                        {
 
 
-                    iteration += 100;
-                    vergrößerung *= 2;
+                            iteration += 100;
+                            vergrößerung *= 2;
+                        }
+                        else
+                        {
+                            iteration -= 100;
+                            vergrößerung /= 2;
+                        }
+                        textBox5.Text = iteration.ToString();
+                        textBox1.Text = vergrößerung.ToString();
+
+                        paint();
+                        isCalculating = false;
+                    }
                 }
-                else
-                {
-                    iteration -= 100;
-                    vergrößerung /= 2;
-                }
-                textBox5.Text = iteration.ToString();
-                textBox1.Text = vergrößerung.ToString();
-
-                paint();
-                isCalculating = false;
-            }
-        }
-
+                */
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             label8.Text = trackBar1.Value / 100.0 + "";
             label9.Text = trackBar2.Value / 100.0 + "";
         }
-
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                setValues();
-                paint();
-            }
-        }
-
-        public void paint()
-        {
-            double cx, cy;
-            cx = (trackBar1.Value/100.0);
-            cy = (trackBar2.Value / 100.0);
-          
-           
-            for (x = xmin; x <= xmax; x++)
-            {
-                for (y = 0; y < map.Height; y++)
+        /*
+                private void Form1_KeyDown(object sender, KeyEventArgs e)
                 {
-                    Color newColor;
-                    double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
-                    double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-                    int value;
-                    if (Fraktalwahl)
+                    if (e.KeyCode == Keys.Enter)
                     {
-                        value = mandelbrot(xwert, ywert, konvergenzradius);
+                        setValues();
+                        paint();
                     }
-                    else
-                    {
-
-                        value = julia(xwert, ywert, cx, cy, konvergenzradius);
-                    }
-                    newColor = calculateColor(value);
-
-
-
-
-                    map.SetPixel(x, y, newColor);
                 }
-
-
-            }
-            xmin += 100;
-            xmax += 100;
-
-            pictureBox1.Image = map;
-            Refresh();
-            if (xmax < auflösung) { paint(); }
-           
-        }
-
+        */
         private void button2_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -254,15 +165,15 @@ namespace Mandelbrot
 
                 fs.Close();
             }
-           
+
         }
 
         private Color calculateColor(int i)
         {
             // inside
-            if(i == -1) 
+            if (i == -1)
             {
-                if(radioButton3.Checked)
+                if (radioButton3.Checked)
                 {
                     return Color.FromArgb(0, 0, 0);
                 }
@@ -349,7 +260,7 @@ namespace Mandelbrot
                     }
                     else
                     {
-                        return Color.FromArgb(newi,0 , 0);
+                        return Color.FromArgb(newi, 0, 0);
                     }
                 }
                 //blau
@@ -357,7 +268,7 @@ namespace Mandelbrot
                 {
                     int newi;
                     // Fein
-                    if (radioButton5.Checked) 
+                    if (radioButton5.Checked)
                     {
                         newi = ((i % 230) * 3) + 50;
                     }
@@ -371,7 +282,7 @@ namespace Mandelbrot
                     {
                         newi = ((i % 20) * 37) + 20;
                     }
-                    
+
                     if (newi > 510)
                     {
                         return Color.FromArgb(newi - 510, 255, 255);
@@ -391,7 +302,54 @@ namespace Mandelbrot
                 }
             }
         }
-        
-        
-    }   
+
+        public void paint(int[,] smap)
+        {
+            double cx, cy;
+            cx = (trackBar1.Value / 100.0);
+            cy = (trackBar2.Value / 100.0);
+
+
+            for (int i = 0; i < smap.GetLength(0); i++)
+            {
+
+                for (int j = 0; j < smap.GetLength(1); j++)
+                {
+                    Color newColor;
+
+                    newColor = calculateColor(smap[i, j]);
+
+
+
+
+                    map.SetPixel(i, j, newColor);
+                }
+            }
+            pictureBox1.Image = map;
+            
+            Refresh();
+
+
+        }
+
+        void mapWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+            {
+                if (e.Cancelled)
+                {
+
+                }
+                else if (e.Error != null)
+                {
+
+                }
+                else
+                {
+
+                    paint((int[,])e.Result);
+                }
+            }
+
+
+        }
+    
 }
