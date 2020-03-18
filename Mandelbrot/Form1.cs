@@ -44,12 +44,16 @@ namespace Mandelbrot
             cx = trackBar1.Value / 100.0;
             cy = trackBar2.Value / 100.0;
             konvergenzradius = Int32.Parse(textBox6.Text);
+            if (konvergenzradius < 2) { konvergenzradius = 2; }
             vergrößerung = Double.Parse(textBox1.Text);
+            if (vergrößerung < 1) { vergrößerung = 1; }
             xverschiebung = Double.Parse(textBox2.Text);
             yverschiebung = Double.Parse(textBox3.Text);
             auflösung = int.Parse(textBox4.Text);
+            if(auflösung<100 || auflösung > 30000) { auflösung = 500; }
             map = new Bitmap(auflösung, auflösung);
             iteration = int.Parse(textBox5.Text);
+            if (iteration < 2) { iteration=2; }
             Fraktalwahl = radioButton1.Checked;
         }
 
@@ -78,7 +82,7 @@ namespace Mandelbrot
 
                         double xposition = ((locationX - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
                         double yposition = ((locationY - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-
+            
                         xverschiebung = (xposition);
                         yverschiebung = (yposition);
                         textBox2.Text = xverschiebung.ToString();
