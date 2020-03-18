@@ -10,35 +10,59 @@ namespace Mandelbrot
 {
     class MapWorker : BackgroundWorker
     {
+
+       
         int[,] map;
-        int xmin;
-        int xmax;
         int auflösung;
         int iteration;
         double vergrößerung;
         double xverschiebung;
         double yverschiebung;
+        double cx, cy;
         int konvergenzradius = 50;
         bool Fraktalwahl = true;
+        int identifier;
+        int xmin;
+        int xmax;
+
+        #region Constructor
+
         public MapWorker()
         {
             WorkerReportsProgress = true;
             WorkerSupportsCancellation = true;
         }
 
-        public MapWorker(int xmin,int xmax,int auflösung, int iteration, double vergrößerung,double xverschiebung,double yverschiebung) : this()
+        public MapWorker(
+            int auflösung,
+            int iteration,
+            double vergrößerung,
+            double xverschiebung,
+            double yverschiebung,
+            bool Fraktalwahl,
+            double cx,
+            double cy,
+            int identifier,
+            int xmin,
+            int xmax
+            ) : this()
         {
             this.map = new int[auflösung,auflösung];
-            this.xmax = xmax;
-            this.xmin = xmin;
+            this.Fraktalwahl = Fraktalwahl;
             this.auflösung = auflösung;
             this.iteration = iteration;
             this.vergrößerung = vergrößerung;
             this.xverschiebung = xverschiebung;
             this.yverschiebung = yverschiebung;
+            this.cx = cx;
+            this.cy = cy;
+            this.identifier = identifier;
+            this.xmin = xmin;
+            this.xmax = xmax;
 
 
         }
+        #endregion
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
@@ -48,28 +72,49 @@ namespace Mandelbrot
                  e.Cancel = true;
                  return;
             }
-            calculate();
+            if (Fraktalwahl)
+            {
+                calculateMandelbrot();
+            }
+            else
+            {
+                calculateJulia();
+            }
             e.Result = map;
         }
 
-        private void calculate()
+        #region HilfsMethoden
+
+        private void calculateMandelbrot()
         {
-            for(int x = 0; x< auflösung; x++)
+            for(int x = xmin; x< xmax; x++)
             {
                 for(int y = 0; y < auflösung;y++)
                 {
                     double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
                     double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
                     
-                    if (Fraktalwahl)
-                    {
-                        map[x,y] = mandelbrot(xwert, ywert, konvergenzradius);
-                    }
-                    else
-                    {
+                    map[x,y] = mandelbrot(xwert, ywert, konvergenzradius);
+                   
+                  
+                }
+                double xx = x;
+                ReportProgress((int)((xx/auflösung)*100.0),identifier);
+            }
+            ReportProgress(100,identifier);
+        }
 
-                      //  value = julia(xwert, ywert, cx, cy, konvergenzradius);
-                    }
+        private void calculateJulia()
+        {
+            for (int x = xmin; x < xmax; x++)
+            {
+                for (int y = 0; y < auflösung; y++)
+                {
+                    double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
+                    double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
+
+                    map[x, y] = julia(xwert, ywert, cx, cy, konvergenzradius);
+                   
                 }
             }
         }
@@ -120,7 +165,7 @@ namespace Mandelbrot
             return ((x * x) + (y * y));
         }
 
-       
+        #endregion
 
 
     }

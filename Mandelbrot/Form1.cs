@@ -12,17 +12,18 @@ namespace Mandelbrot
 {
     public partial class Form1 : Form
     {
-        int x, y;
+      
         int iteration = 100;
         double vergrößerung = 2;
         double xverschiebung = 0;
         double yverschiebung = 0;
         int auflösung = 1000;
-        Thread th;
-        Boolean isCalculating = false;
+        double cx, cy;
+        
+  
+
         Boolean Fraktalwahl = true;
-        int xmin = 0;
-        int xmax = 99;
+   
         int konvergenzradius = 50;
 
         Bitmap map;
@@ -37,14 +38,11 @@ namespace Mandelbrot
 
         }
 
-
-
         private void setValues()
         {
-            x = 0;
-            y = 0;
-            xmin = 0;
-            xmax = 99;
+
+            cx = trackBar1.Value / 100.0;
+            cy = trackBar2.Value / 100.0;
             konvergenzradius = Int32.Parse(textBox6.Text);
             vergrößerung = Double.Parse(textBox1.Text);
             xverschiebung = Double.Parse(textBox2.Text);
@@ -57,34 +55,30 @@ namespace Mandelbrot
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            button1.Enabled = false;
             setValues();
-            MapWorker worker = new MapWorker(xmin, xmax, auflösung, iteration, vergrößerung, xverschiebung, yverschiebung);
-            worker.RunWorkerCompleted += mapWorkerCompleted;
-            worker.RunWorkerAsync();
+            MapWorker worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung,Fraktalwahl,cx,cy,0,0,auflösung/2);
+            worker1.RunWorkerCompleted += mapWorkerCompleted;
+            worker1.ProgressChanged += mapWorkerProgressChanged;
+            worker1.RunWorkerAsync();
+
+            MapWorker worker2 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 1, auflösung / 2,auflösung);
+            worker2.RunWorkerCompleted += mapWorkerCompleted;
+            worker2.ProgressChanged += mapWorkerProgressChanged;
+            worker2.RunWorkerAsync();
 
         }
-        /*
-                private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+        
+        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
                 {
-                    if (!isCalculating)
-                    {
-                        isCalculating = true;
-                        x = 0;
-                        y = 0;
-                        xmin = 0;
-                        xmax = 99;
-
+                        pictureBox1.Enabled = false;
                         if (map == null) { return; }
                         double locationY = e.Location.Y * (auflösung / 1000.0);
                         double locationX = e.Location.X * (auflösung / 1000.0);
 
                         double xposition = ((locationX - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
                         double yposition = ((locationY - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-                        Console.WriteLine(e.Location.X);
-                        Console.WriteLine(e.Location.Y);
-                        Console.WriteLine(xposition);
-                        Console.WriteLine(yposition);
+
                         xverschiebung = (xposition);
                         yverschiebung = (yposition);
                         textBox2.Text = xverschiebung.ToString();
@@ -105,26 +99,37 @@ namespace Mandelbrot
                         textBox5.Text = iteration.ToString();
                         textBox1.Text = vergrößerung.ToString();
 
-                        paint();
-                        isCalculating = false;
-                    }
-                }
-                */
+                        setValues();
+                        MapWorker worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 0, 0, auflösung / 2);
+                        worker1.RunWorkerCompleted += mapWorkerCompleted;
+                        worker1.ProgressChanged += mapWorkerProgressChanged;
+                        worker1.RunWorkerAsync();
+
+                        MapWorker worker2 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 1, auflösung / 2, auflösung);
+                        worker2.RunWorkerCompleted += mapWorkerCompleted;
+                        worker2.ProgressChanged += mapWorkerProgressChanged;
+                        worker2.RunWorkerAsync();
+
+        }
+                
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             label8.Text = trackBar1.Value / 100.0 + "";
             label9.Text = trackBar2.Value / 100.0 + "";
         }
-        /*
-                private void Form1_KeyDown(object sender, KeyEventArgs e)
+        
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
                 {
                     if (e.KeyCode == Keys.Enter)
                     {
                         setValues();
-                        paint();
+                        MapWorker worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung,Fraktalwahl,cx,cy,0,0,auflösung);
+                        worker1.RunWorkerCompleted += mapWorkerCompleted;
+                        worker1.ProgressChanged += mapWorkerProgressChanged;
+                        worker1.RunWorkerAsync();
                     }
                 }
-        */
+       
         private void button2_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -315,14 +320,14 @@ namespace Mandelbrot
 
                 for (int j = 0; j < smap.GetLength(1); j++)
                 {
-                    Color newColor;
+                    if (smap[i, j] != 0)
+                    {
+                        Color newColor;
 
-                    newColor = calculateColor(smap[i, j]);
+                        newColor = calculateColor(smap[i, j]);
 
-
-
-
-                    map.SetPixel(i, j, newColor);
+                        map.SetPixel(i, j, newColor);
+                    }
                 }
             }
             pictureBox1.Image = map;
@@ -334,6 +339,8 @@ namespace Mandelbrot
 
         void mapWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
             {
+            button1.Enabled = true;
+            pictureBox1.Enabled = true;
                 if (e.Cancelled)
                 {
 
@@ -343,13 +350,24 @@ namespace Mandelbrot
 
                 }
                 else
-                {
-
+                {                  
                     paint((int[,])e.Result);
                 }
             }
 
-
+        void mapWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            switch (e.UserState)
+            {
+                case 0:
+                 progressBar1.Value = e.ProgressPercentage;
+                    break;
+                case 1:                
+                    progressBar2.Value = e.ProgressPercentage;
+                    break;
+            }
         }
+
+    }
     
 }
