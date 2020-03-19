@@ -22,8 +22,8 @@ namespace Mandelbrot
         int konvergenzradius = 50;
         bool Fraktalwahl = true;
         int identifier;
-        int xmin;
         int xmax;
+        int xmin;
 
         #region Constructor
 
@@ -99,7 +99,7 @@ namespace Mandelbrot
                   
                 }
                 double xx = x;
-                ReportProgress((int)((xx/auflösung)*100.0),identifier);
+                ReportProgress((int)(((xx-xmin)/(auflösung/2.0))*100.0),identifier);
             }
             ReportProgress(100,identifier);
         }
