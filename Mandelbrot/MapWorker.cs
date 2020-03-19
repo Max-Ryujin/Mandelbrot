@@ -22,8 +22,7 @@ namespace Mandelbrot
         int konvergenzradius = 50;
         bool Fraktalwahl = true;
         int identifier;
-        int xmax;
-        int xmin;
+        
 
         #region Constructor
 
@@ -42,9 +41,8 @@ namespace Mandelbrot
             bool Fraktalwahl,
             double cx,
             double cy,
-            int identifier,
-            int xmin,
-            int xmax
+            int identifier
+            
             ) : this()
         {
             this.map = new int[auflösung,auflösung];
@@ -57,8 +55,7 @@ namespace Mandelbrot
             this.cx = cx;
             this.cy = cy;
             this.identifier = identifier;
-            this.xmin = xmin;
-            this.xmax = xmax;
+            
 
 
         }
@@ -81,13 +78,14 @@ namespace Mandelbrot
                 calculateJulia();
             }
             e.Result = map;
+            
         }
 
         #region HilfsMethoden
 
         private void calculateMandelbrot()
         {
-            for(int x = xmin; x< xmax; x++)
+            for(int x = identifier; x< auflösung; x+=3)
             {
                 for(int y = 0; y < auflösung;y++)
                 {
@@ -99,14 +97,14 @@ namespace Mandelbrot
                   
                 }
                 double xx = x;
-                ReportProgress((int)(((xx-xmin)/(auflösung/2.0))*100.0),identifier);
+                ReportProgress((int)(((xx)/(auflösung))*100.0),identifier);
             }
             ReportProgress(100,identifier);
         }
 
         private void calculateJulia()
         {
-            for (int x = xmin; x < xmax; x++)
+            for (int x = identifier; x < auflösung; x+=3)
             {
                 for (int y = 0; y < auflösung; y++)
                 {
@@ -116,7 +114,10 @@ namespace Mandelbrot
                     map[x, y] = julia(xwert, ywert, cx, cy, konvergenzradius);
                    
                 }
+                double xx = x;
+                ReportProgress((int)(((xx) / (auflösung)) * 100.0), identifier);
             }
+            ReportProgress(100, identifier);
         }
 
         public int julia(double x, double y, double x2, double y2, double m)
