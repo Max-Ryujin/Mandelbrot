@@ -19,8 +19,10 @@ namespace Mandelbrot
         double yverschiebung = 0;
         int auflösung = 1000;
         double cx, cy;
-        
-  
+
+        MapWorker worker1;
+        MapWorker worker2;
+        MapWorker worker3;
 
         Boolean Fraktalwahl = true;
    
@@ -61,15 +63,20 @@ namespace Mandelbrot
         {
             button1.Enabled = false;
             setValues();
-            MapWorker worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung,Fraktalwahl,cx,cy,0,0,auflösung/2);
-            worker1.RunWorkerCompleted += mapWorkerCompleted;
+            worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung,Fraktalwahl,cx,cy,0);
+            worker1.RunWorkerCompleted += mapWorker1Completed;
             worker1.ProgressChanged += mapWorkerProgressChanged;
             worker1.RunWorkerAsync();
 
-            MapWorker worker2 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 1, auflösung / 2,auflösung);
-            worker2.RunWorkerCompleted += mapWorkerCompleted;
+            worker2 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 1);
+            worker2.RunWorkerCompleted += mapWorker2Completed;
             worker2.ProgressChanged += mapWorkerProgressChanged;
             worker2.RunWorkerAsync();
+
+            worker3 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 2);
+            worker3.RunWorkerCompleted += mapWorker3Completed;
+            worker3.ProgressChanged += mapWorkerProgressChanged;
+            worker3.RunWorkerAsync();
 
         }
         
@@ -104,15 +111,20 @@ namespace Mandelbrot
                         textBox1.Text = vergrößerung.ToString();
 
                         setValues();
-                        MapWorker worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 0, 0, auflösung / 2);
-                        worker1.RunWorkerCompleted += mapWorkerCompleted;
+                        MapWorker worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 0);
+                        worker1.RunWorkerCompleted += mapWorker1Completed;
                         worker1.ProgressChanged += mapWorkerProgressChanged;
                         worker1.RunWorkerAsync();
 
-                        MapWorker worker2 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 1, auflösung / 2, auflösung);
-                        worker2.RunWorkerCompleted += mapWorkerCompleted;
+                        MapWorker worker2 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 1);
+                        worker2.RunWorkerCompleted += mapWorker1Completed;
                         worker2.ProgressChanged += mapWorkerProgressChanged;
                         worker2.RunWorkerAsync();
+
+                        MapWorker worker3 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 2);
+                        worker3.RunWorkerCompleted += mapWorker2Completed;
+                        worker3.ProgressChanged += mapWorkerProgressChanged;
+                        worker3.RunWorkerAsync();
 
         }
                 
@@ -127,11 +139,21 @@ namespace Mandelbrot
                     if (e.KeyCode == Keys.Enter)
                     {
                         setValues();
-                        MapWorker worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung,Fraktalwahl,cx,cy,0,0,auflösung);
-                        worker1.RunWorkerCompleted += mapWorkerCompleted;
+                        MapWorker worker1 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung,Fraktalwahl,cx,cy,0);
+                        worker1.RunWorkerCompleted += mapWorker1Completed;
                         worker1.ProgressChanged += mapWorkerProgressChanged;
                         worker1.RunWorkerAsync();
-                    }
+
+                        MapWorker worker2 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 1);
+                        worker2.RunWorkerCompleted += mapWorker2Completed;
+                        worker2.ProgressChanged += mapWorkerProgressChanged;
+                        worker2.RunWorkerAsync();
+
+                        MapWorker worker3 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 2);
+                        worker3.RunWorkerCompleted += mapWorker3Completed;
+                        worker3.ProgressChanged += mapWorkerProgressChanged;
+                        worker3.RunWorkerAsync();
+            }
                 }
        
         private void button2_Click(object sender, EventArgs e)
@@ -312,17 +334,14 @@ namespace Mandelbrot
             }
         }
 
-        public void paint(int[,] smap)
+        public void paint(int[,] smap,int workernumber)
         {
-            double cx, cy;
-            cx = (trackBar1.Value / 100.0);
-            cy = (trackBar2.Value / 100.0);
+           
 
-
-            for (int i = 0; i < smap.GetLength(0); i++)
+            for (int i = workernumber; i < auflösung; i+=3)
             {
 
-                for (int j = 0; j < smap.GetLength(1); j++)
+                for (int j = 0; j < auflösung; j++)
                 {
                     if (smap[i, j] != 0)
                     {
@@ -341,7 +360,7 @@ namespace Mandelbrot
 
         }
 
-        void mapWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        void mapWorker1Completed(object sender, RunWorkerCompletedEventArgs e)
             {
             button1.Enabled = true;
             pictureBox1.Enabled = true;
@@ -355,21 +374,51 @@ namespace Mandelbrot
                 }
                 else
                 {                  
-                    paint((int[,])e.Result);
+                    paint((int[,])e.Result,0);
                 }
             }
 
+        void mapWorker2Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            button1.Enabled = true;
+            pictureBox1.Enabled = true;
+            if (e.Cancelled)
+            {
+
+            }
+            else if (e.Error != null)
+            {
+
+            }
+            else
+            {
+                paint((int[,])e.Result,1);
+            }
+        }
+
+        void mapWorker3Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            button1.Enabled = true;
+            pictureBox1.Enabled = true;
+            if (e.Cancelled)
+            {
+
+            }
+            else if (e.Error != null)
+            {
+
+            }
+            else
+            {
+                paint((int[,])e.Result,2);
+            }
+        }
+
         void mapWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            switch (e.UserState)
-            {
-                case 0:
+           
                  progressBar1.Value = e.ProgressPercentage;
-                    break;
-                case 1:                
-                    progressBar2.Value = e.ProgressPercentage;
-                    break;
-            }
+           
         }
 
     }
