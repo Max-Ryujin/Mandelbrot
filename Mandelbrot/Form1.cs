@@ -97,8 +97,6 @@ namespace Mandelbrot
 
                         if (e.Button.ToString() == "Left")
                         {
-
-
                             iteration += 100;
                             vergrößerung *= 2;
                         }
