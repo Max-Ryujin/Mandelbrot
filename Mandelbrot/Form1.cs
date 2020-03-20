@@ -55,7 +55,7 @@ namespace Mandelbrot
             if(auflösung<100 || auflösung > 30000) { auflösung = 500; }
             map = new Bitmap(auflösung, auflösung);
             iteration = int.Parse(textBox5.Text);
-            if (iteration < 2) { iteration=2; }
+            if (iteration < 100) { iteration=100; }
             Fraktalwahl = radioButton1.Checked;
         }
 
@@ -117,12 +117,12 @@ namespace Mandelbrot
                         worker1.RunWorkerAsync();
 
                         MapWorker worker2 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 1);
-                        worker2.RunWorkerCompleted += mapWorker1Completed;
+                        worker2.RunWorkerCompleted += mapWorker2Completed;
                         worker2.ProgressChanged += mapWorkerProgressChanged;
                         worker2.RunWorkerAsync();
 
                         MapWorker worker3 = new MapWorker(auflösung, iteration, vergrößerung, xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 2);
-                        worker3.RunWorkerCompleted += mapWorker2Completed;
+                        worker3.RunWorkerCompleted += mapWorker3Completed;
                         worker3.ProgressChanged += mapWorkerProgressChanged;
                         worker3.RunWorkerAsync();
 
