@@ -1,0 +1,41 @@
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.exe.config
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.exe
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.pdb
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.csprojAssemblyReference.cache
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.Form1.resources
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.Properties.Resources.resources
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.csproj.GenerateResource.cache
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.csproj.CoreCompileInputs.cache
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.exe
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.pdb
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.exe.manifest
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.application
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.exe.manifest
+C:\Users\MaxKa\source\repos\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.application
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.exe.config
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.exe.manifest
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.application
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.exe
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\bin\Debug\Mandelbrot.pdb
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.csprojAssemblyReference.cache
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.Form1.resources
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.Properties.Resources.resources
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.csproj.GenerateResource.cache
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.csproj.CoreCompileInputs.cache
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.exe.manifest
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.application
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.exe
+C:\Users\Max Kannen\Documents\GitHub\Mandelbrot\Mandelbrot\obj\Debug\Mandelbrot.pdb
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\bin\Debug\Mandelbrot.exe.config
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\bin\Debug\Mandelbrot.exe.manifest
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\bin\Debug\Mandelbrot.application
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\bin\Debug\Mandelbrot.exe
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\bin\Debug\Mandelbrot.pdb
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\obj\Debug\Mandelbrot.csprojAssemblyReference.cache
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\obj\Debug\Mandelbrot.Form1.resources
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\obj\Debug\Mandelbrot.Properties.Resources.resources
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\obj\Debug\Mandelbrot.csproj.GenerateResource.cache
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\obj\Debug\Mandelbrot.exe.manifest
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\obj\Debug\Mandelbrot.application
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\obj\Debug\Mandelbrot.exe
+D:\Mandelbrot-MultThreding\Mandelbrot-MultThreding\Mandelbrot\obj\Debug\Mandelbrot.pdb
