@@ -25,10 +25,11 @@ namespace Mandelbrot
         MapWorker worker3;
 
         Boolean Fraktalwahl = true;
-   
+        
         int konvergenzradius = 50;
 
         Bitmap map;
+        Bitmap previewMap;
 
         public Form1()
         {
@@ -78,6 +79,13 @@ namespace Mandelbrot
             worker3.ProgressChanged += mapWorkerProgressChanged;
             worker3.RunWorkerAsync();
 
+            if(auflösung>=5000)
+            {
+                MapWorker previewWorker = new MapWorker(700, iteration, vergrößerung * (700.0 / auflösung), xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 3);
+                previewWorker.RunWorkerCompleted += previewWorkerCompleted;
+                previewWorker.RunWorkerAsync();
+            }
+
         }
         
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
@@ -124,8 +132,15 @@ namespace Mandelbrot
                         worker3.ProgressChanged += mapWorkerProgressChanged;
                         worker3.RunWorkerAsync();
 
+                        if (auflösung >= 5000)
+                        {
+                            MapWorker previewWorker = new MapWorker(700, iteration, vergrößerung * (700.0 / auflösung), xverschiebung, yverschiebung, Fraktalwahl, cx, cy, 3);
+                            previewWorker.RunWorkerCompleted += previewWorkerCompleted;
+                            previewWorker.RunWorkerAsync();
+                        }
+
         }
-                
+        
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             label8.Text = trackBar1.Value / 100.0 + "";
@@ -153,7 +168,7 @@ namespace Mandelbrot
                         worker3.RunWorkerAsync();
             }
                 }
-       
+        
         private void button2_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -334,27 +349,51 @@ namespace Mandelbrot
 
         public void paint(int[,] smap,int workernumber)
         {
-           
-
-            for (int i = workernumber; i < auflösung; i+=3)
+            if (workernumber == 3)
             {
-
-                for (int j = 0; j < auflösung; j++)
+                previewMap = new Bitmap(700,700);
+                for (int i = 0; i < 700; i++)
                 {
-                    if (smap[i, j] != 0)
+
+                    for (int j = 0; j < 700; j++)
                     {
-                        Color newColor;
+                        if (smap[i, j] != 0)
+                        {
+                            Color newColor;
 
-                        newColor = calculateColor(smap[i, j]);
+                            newColor = calculateColor(smap[i, j]);
 
-                        map.SetPixel(i, j, newColor);
+                            previewMap.SetPixel(i, j, newColor);
+                        }
                     }
                 }
-            }
-            pictureBox1.Image = map;
-            
-            Refresh();
+                pictureBox1.Image = previewMap;
 
+                Refresh();
+            }
+            else
+            {
+
+
+                for (int i = workernumber; i < auflösung; i += 3)
+                {
+
+                    for (int j = 0; j < auflösung; j++)
+                    {
+                        if (smap[i, j] != 0)
+                        {
+                            Color newColor;
+
+                            newColor = calculateColor(smap[i, j]);
+
+                            map.SetPixel(i, j, newColor);
+                        }
+                    }
+                }
+                pictureBox1.Image = map;
+
+                Refresh();
+            }
 
         }
 
@@ -409,6 +448,22 @@ namespace Mandelbrot
             else
             {
                 paint((int[,])e.Result,2);
+            }
+        }
+
+        void previewWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+
+            }
+            else if (e.Error != null)
+            {
+
+            }
+            else
+            {
+                paint((int[,])e.Result, 3);
             }
         }
 

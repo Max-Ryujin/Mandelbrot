@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Mandelbrot.exe" size="25512">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Mandelbrot.exe" size="26536">
       <assemblyIdentity name="Mandelbrot" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>yj34rwn1TPgSva1NxFY1uNpcJz9AkMatFjuZZj4q+5o=</dsig:DigestValue>
+        <dsig:DigestValue>j1wXqU6aJESBQ18Np9xfptW2i49pKeej91Zcze8efIs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

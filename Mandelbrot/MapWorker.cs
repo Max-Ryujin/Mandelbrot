@@ -85,21 +85,41 @@ namespace Mandelbrot
 
         private void calculateMandelbrot()
         {
-            for(int x = identifier; x< auflösung; x+=3)
+            if (identifier == 3)
             {
-                for(int y = 0; y < auflösung;y++)
+                for (int x = 0; x < auflösung; x ++)
                 {
-                    double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
-                    double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-                    
-                    map[x,y] = mandelbrot(xwert, ywert, konvergenzradius);
+                    for (int y = 0; y < auflösung; y++)
+                    {
+                        double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
+                        double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
+
+                        map[x, y] = mandelbrot(xwert, ywert, konvergenzradius);
+
+
+                    }
+                    double xx = x;
                    
-                  
                 }
-                double xx = x;
-                ReportProgress((int)(((xx)/(auflösung))*100.0),identifier);
             }
-            ReportProgress(100,identifier);
+            else
+            {
+                for (int x = identifier; x < auflösung; x += 3)
+                {
+                    for (int y = 0; y < auflösung; y++)
+                    {
+                        double xwert = ((x - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
+                        double ywert = ((y - (auflösung / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
+
+                        map[x, y] = mandelbrot(xwert, ywert, konvergenzradius);
+
+
+                    }
+                    double xx = x;
+                    ReportProgress((int)(((xx) / (auflösung)) * 100.0), identifier);
+                }
+                ReportProgress(100, identifier);
+            }
         }
 
         private void calculateJulia()
