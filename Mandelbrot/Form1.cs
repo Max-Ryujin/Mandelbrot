@@ -467,6 +467,23 @@ namespace Mandelbrot
             }
         }
 
+        private void radioButton12_CheckedChanged(object sender, EventArgs e)
+        {
+            if(!radioButton12.Checked)
+            {
+                textBox4.Enabled = true;
+                textBox5.Enabled = true;
+                textBox6.Enabled = true;
+
+            }
+            else
+            {
+                textBox4.Enabled = false;
+                textBox5.Enabled = false;
+                textBox6.Enabled = false;
+            }
+        }
+
         void mapWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
            
