@@ -30,16 +30,16 @@
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.ZoomTextbox = new System.Windows.Forms.TextBox();
+            this.xValueTextbox = new System.Windows.Forms.TextBox();
+            this.yValueTextbox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.resulutionTextbox = new System.Windows.Forms.TextBox();
+            this.iterationTextbox = new System.Windows.Forms.TextBox();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -49,7 +49,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.ConvergenzRadiusTextbox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -69,8 +69,8 @@
             this.label11 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.radioButton12 = new System.Windows.Forms.RadioButton();
             this.radioButton13 = new System.Windows.Forms.RadioButton();
+            this.radioButton12 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
@@ -91,7 +91,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
             // 
             // button1
             // 
@@ -102,34 +101,36 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "Paint";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox1
+            // ZoomTextbox
             // 
-            this.textBox1.Location = new System.Drawing.Point(2252, 37);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(114, 31);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "2";
+            this.ZoomTextbox.Location = new System.Drawing.Point(2252, 37);
+            this.ZoomTextbox.Margin = new System.Windows.Forms.Padding(4);
+            this.ZoomTextbox.Name = "ZoomTextbox";
+            this.ZoomTextbox.Size = new System.Drawing.Size(114, 31);
+            this.ZoomTextbox.TabIndex = 2;
+            this.ZoomTextbox.Text = "2";
+            this.ZoomTextbox.TextChanged += new System.EventHandler(this.ZoomTextbox_TextChanged);
             // 
-            // textBox2
+            // xValueTextbox
             // 
-            this.textBox2.Location = new System.Drawing.Point(2252, 117);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(114, 31);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "-0,4";
+            this.xValueTextbox.Location = new System.Drawing.Point(2252, 117);
+            this.xValueTextbox.Margin = new System.Windows.Forms.Padding(4);
+            this.xValueTextbox.Name = "xValueTextbox";
+            this.xValueTextbox.Size = new System.Drawing.Size(114, 31);
+            this.xValueTextbox.TabIndex = 3;
+            this.xValueTextbox.Text = "-0,4";
+            this.xValueTextbox.TextChanged += new System.EventHandler(this.xValueTextbox_TextChanged);
             // 
-            // textBox3
+            // yValueTextbox
             // 
-            this.textBox3.Location = new System.Drawing.Point(2252, 167);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(114, 31);
-            this.textBox3.TabIndex = 4;
-            this.textBox3.Text = "0";
+            this.yValueTextbox.Location = new System.Drawing.Point(2252, 167);
+            this.yValueTextbox.Margin = new System.Windows.Forms.Padding(4);
+            this.yValueTextbox.Name = "yValueTextbox";
+            this.yValueTextbox.Size = new System.Drawing.Size(114, 31);
+            this.yValueTextbox.TabIndex = 4;
+            this.yValueTextbox.Text = "0";
+            this.yValueTextbox.TextChanged += new System.EventHandler(this.yValueTextbox_TextChanged);
             // 
             // label1
             // 
@@ -177,29 +178,30 @@
             this.label5.Location = new System.Drawing.Point(2072, 131);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(152, 25);
+            this.label5.Size = new System.Drawing.Size(121, 25);
             this.label5.TabIndex = 9;
-            this.label5.Text = "xverschiebung";
+            this.label5.Text = "xDifference";
             // 
-            // textBox4
+            // resulutionTextbox
             // 
-            this.textBox4.Enabled = false;
-            this.textBox4.Location = new System.Drawing.Point(2252, 252);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 31);
-            this.textBox4.TabIndex = 10;
-            this.textBox4.Text = "1000";
+            this.resulutionTextbox.Enabled = false;
+            this.resulutionTextbox.Location = new System.Drawing.Point(2252, 252);
+            this.resulutionTextbox.Margin = new System.Windows.Forms.Padding(4);
+            this.resulutionTextbox.Name = "resulutionTextbox";
+            this.resulutionTextbox.Size = new System.Drawing.Size(100, 31);
+            this.resulutionTextbox.TabIndex = 10;
+            this.resulutionTextbox.Text = "1000";
+            this.resulutionTextbox.TextChanged += new System.EventHandler(this.resulutionTextbox_TextChanged);
             // 
-            // textBox5
+            // iterationTextbox
             // 
-            this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(2252, 321);
-            this.textBox5.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 31);
-            this.textBox5.TabIndex = 11;
-            this.textBox5.Text = "200";
+            this.iterationTextbox.Enabled = false;
+            this.iterationTextbox.Location = new System.Drawing.Point(2252, 321);
+            this.iterationTextbox.Margin = new System.Windows.Forms.Padding(4);
+            this.iterationTextbox.Name = "iterationTextbox";
+            this.iterationTextbox.Size = new System.Drawing.Size(100, 31);
+            this.iterationTextbox.TabIndex = 11;
+            this.iterationTextbox.Text = "200";
             // 
             // trackBar1
             // 
@@ -213,7 +215,6 @@
             this.trackBar1.Size = new System.Drawing.Size(328, 90);
             this.trackBar1.TabIndex = 15;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // trackBar2
             // 
@@ -227,7 +228,6 @@
             this.trackBar2.Size = new System.Drawing.Size(328, 90);
             this.trackBar2.TabIndex = 16;
             this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBar2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // groupBox1
             // 
@@ -307,15 +307,15 @@
             this.label9.TabIndex = 21;
             this.label9.Text = "0";
             // 
-            // textBox6
+            // ConvergenzRadiusTextbox
             // 
-            this.textBox6.Enabled = false;
-            this.textBox6.Location = new System.Drawing.Point(2252, 387);
-            this.textBox6.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(79, 31);
-            this.textBox6.TabIndex = 22;
-            this.textBox6.Text = "50";
+            this.ConvergenzRadiusTextbox.Enabled = false;
+            this.ConvergenzRadiusTextbox.Location = new System.Drawing.Point(2252, 387);
+            this.ConvergenzRadiusTextbox.Margin = new System.Windows.Forms.Padding(4);
+            this.ConvergenzRadiusTextbox.Name = "ConvergenzRadiusTextbox";
+            this.ConvergenzRadiusTextbox.Size = new System.Drawing.Size(79, 31);
+            this.ConvergenzRadiusTextbox.TabIndex = 22;
+            this.ConvergenzRadiusTextbox.Text = "50";
             // 
             // label10
             // 
@@ -500,7 +500,6 @@
             this.button2.TabIndex = 25;
             this.button2.Text = "Save";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label11
             // 
@@ -533,6 +532,16 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Settings";
             // 
+            // radioButton13
+            // 
+            this.radioButton13.AutoSize = true;
+            this.radioButton13.Location = new System.Drawing.Point(217, 44);
+            this.radioButton13.Name = "radioButton13";
+            this.radioButton13.Size = new System.Drawing.Size(134, 29);
+            this.radioButton13.TabIndex = 1;
+            this.radioButton13.Text = "Extended";
+            this.radioButton13.UseVisualStyleBackColor = true;
+            // 
             // radioButton12
             // 
             this.radioButton12.AutoSize = true;
@@ -544,17 +553,7 @@
             this.radioButton12.TabStop = true;
             this.radioButton12.Text = "Standard";
             this.radioButton12.UseVisualStyleBackColor = true;
-            this.radioButton12.CheckedChanged += new System.EventHandler(this.radioButton12_CheckedChanged);
-            // 
-            // radioButton13
-            // 
-            this.radioButton13.AutoSize = true;
-            this.radioButton13.Location = new System.Drawing.Point(217, 44);
-            this.radioButton13.Name = "radioButton13";
-            this.radioButton13.Size = new System.Drawing.Size(134, 29);
-            this.radioButton13.TabIndex = 1;
-            this.radioButton13.Text = "Extended";
-            this.radioButton13.UseVisualStyleBackColor = true;
+            this.radioButton12.CheckedChanged += new System.EventHandler(this.RadioButtonSetting_CheckedChanged);
             // 
             // Form1
             // 
@@ -567,7 +566,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.ConvergenzRadiusTextbox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
@@ -575,23 +574,22 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.trackBar1);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.iterationTextbox);
+            this.Controls.Add(this.resulutionTextbox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.yValueTextbox);
+            this.Controls.Add(this.xValueTextbox);
+            this.Controls.Add(this.ZoomTextbox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Mandelbrot";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
@@ -615,16 +613,16 @@
 
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox ZoomTextbox;
+        private System.Windows.Forms.TextBox xValueTextbox;
+        private System.Windows.Forms.TextBox yValueTextbox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox resulutionTextbox;
+        private System.Windows.Forms.TextBox iterationTextbox;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.TrackBar trackBar2;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -634,7 +632,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox ConvergenzRadiusTextbox;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox InnerColor;
