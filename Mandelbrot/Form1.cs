@@ -70,11 +70,6 @@ namespace Mandelbrot
         }
 
         fraktal _Fraktalwahl;
-        public enum fraktal
-        {
-            Mandelbrot,
-            Julia
-        }
         public fraktal Fractal
         {
             get { return _Fraktalwahl; }
@@ -196,33 +191,20 @@ namespace Mandelbrot
             }
         }
 
+        public void ColorManagement_PropertyChanged_Event(object sender, EventArgs e)
+        {
+            Logic.CalculateBitmap()
+            paint();
+        }
+
         #endregion
 
         #region helper
 
-        private void paint(int[,] smap, int workernumber)
+        private void paint()
         {
             pictureBox1.Image = dBitmap.Bitmap;
             Refresh();
-        }
-
-        public void CalculateBitmap()
-        {
-            try
-            {
-                if (Fractal == fraktal.Mandelbrot)
-                {
-
-                }
-                else
-                {
-
-                }
-            }
-            catch(Exception ex)
-            {
-
-            }
         }
 
         #endregion

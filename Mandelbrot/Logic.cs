@@ -9,43 +9,61 @@ namespace Mandelbrot
 {
     public static class Logic
     {
-        static void calculateMandelbrot(int resulution)
-        {        
-                for (int x = 0; x < resulution; x++)
-                {
-                    for (int y = 0; y < resulution; y++)
-                    {
-                        double xwert = ((x - (resulution / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
-                        double ywert = ((y - (resulution / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-
-                        map[x, y] = mandelbrot(xwert, ywert, konvergenzradius);
-
-
-                    }
-                    double xx = x;
-
-                }          
-            else
+        /// <summary>
+        /// Calulates the entire Bitmap
+        /// </summary>
+        /// <param name="dBitmap"></param>
+        /// <param name="resulution"></param>
+        /// <param name="zoom"></param>
+        /// <param name="xMovement"></param>
+        /// <param name="yMovement"></param>
+        /// <param name="radius"></param>
+        /// <param name="_fractal"></param>
+        public static async void CalculateBitmap(DirectBitmap dBitmap, int resulution, int zoom, double xMovement, double yMovement, int radius, fraktal _fractal, int iteration)
+        {
+            try
             {
-                for (int x = identifier; x < resulution; x += 3)
+                if (_fractal == fraktal.Mandelbrot)
                 {
-                    for (int y = 0; y < resulution; y++)
-                    {
-                        double xwert = ((x - (resulution / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
-                        double ywert = ((y - (resulution / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
-
-                        map[x, y] = mandelbrot(xwert, ywert, konvergenzradius);
-
-
-                    }
-                    double xx = x;
-                    ReportProgress((int)(((xx) / (resulution)) * 100.0), identifier);
+                    //Calulate MandelBrot
+                    calculateMandelbrot(resulution, dBitmap, radius, zoom, xMovement, yMovement, iteration);
                 }
-                ReportProgress(100, identifier);
+                else
+                {
+                   // calculateJulia(resulution, dBitmap, radius, zoom, xMovement, yMovement);
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
-        private void calculateJulia()
+        static async void calculateMandelbrot(int resulution, DirectBitmap dMap, int radius, int zoom, double xMovement, double yMovement, int iteration)
+        {
+            List<Task<Pixel>> PixelTasks = new List<Task<Pixel>>();
+            for (int x = 0; x < resulution; x++)
+            {
+                for (int y = 0; y < resulution; y++)
+                {
+                    // Calulate PixelPosition
+                    double xwert = ((x - (resulution / 2.0)) / (zoom * 100.0)) + (xMovement);
+                    double ywert = ((y - (resulution / 2.0)) / (zoom * 100.0)) + (yMovement);
+                    //Calculate Pixel Color 
+                    PixelTasks.Add(mandelbrot(xwert, ywert, radius, iteration));
+                }
+                double xx = x;
+            }
+            while(PixelTasks.Count > 0)
+            {
+                Task<Pixel> finishedTask = await Task.WhenAny(PixelTasks);
+                Pixel pixel = finishedTask.Result;
+                dMap.SetPixel(pixel.x, pixel.y, pixel.color);
+            }
+           
+        }
+
+        private static void calculateJulia()
         {
 
             for (int x = identifier; x < resulution; x += 3)
@@ -64,7 +82,7 @@ namespace Mandelbrot
             ReportProgress(100, identifier);
         }
 
-        public int julia(double x, double y, double x2, double y2, double m)
+        public static int julia(double x, double y, double x2, double y2, double m)
         {
             for (int i = 1; i <= iteration; i++)
             {
@@ -82,7 +100,7 @@ namespace Mandelbrot
             return -1;
         }
 
-        public int mandelbrot(double x, double y, double m)
+        public static async Task<Pixel> mandelbrot(double x, double y, double radius, int iteration)
         {
             double xx = 0;
             double yy = 0;
@@ -92,7 +110,7 @@ namespace Mandelbrot
                 xx = (xx * xx) - (yy * yy) + x;
 
                 yy = 2 * xtemp * yy + y;
-                if (betrag(xx, yy) > m)
+                if (betrag(xx, yy) > radius)
                 {
                     return i;
 
@@ -103,12 +121,12 @@ namespace Mandelbrot
             return -1;
         }
 
-        public double betrag(double x, double y)
+        public static double betrag(double x, double y)
         {
             return ((x * x) + (y * y));
         }
 
-        private Color calculateColor(int i)
+        private static Color calculateColor(int i)
         {
             // inside
             if (i == -1)
