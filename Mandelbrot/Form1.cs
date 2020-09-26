@@ -4,6 +4,8 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Threading;
 using System.ComponentModel;
+using System.Threading.Tasks;
+
 
 
 
@@ -18,62 +20,18 @@ namespace Mandelbrot
         public DirectBitmap dBitmap
         {
             get { return _dBitmap; }
-            set { _dBitmap = value; }
-        }
-
-        private int _iteration;
-        public int iteration
-        {
-            get { return _iteration; }
-            set { _iteration = value; }
-        }
-
-        private double _zoomValue;
-        public double zoomValue
-        {
-            get { return _zoomValue; }
-            set { _zoomValue = value; }
-        }
-
-        private double _xverschiebung = 0;
-        public double xDifference
-        {
-            get { return _xverschiebung; }
-            set { _xverschiebung = value; }
-        }
-
-        private double _yverschiebung = 0;
-        public double yDifference
-        {
-            get { return _yverschiebung; }
-            set { _yverschiebung = value; }
-        }
-
-        private int _auflösung;
-        public int resulution
-        {
-            get { return _auflösung; }
             set
             {
-                _auflösung = value;
-                dBitmap.Dispose();
-                dBitmap = new DirectBitmap(_auflösung, _auflösung);
+                _dBitmap = value;
+                paint();
             }
         }
 
- 
-        private int _konvergenzradius;
-        public int convergenzRadius
+        private SettingsTemplate _settings;
+        public SettingsTemplate settings
         {
-            get { return _konvergenzradius; }
-            set { _konvergenzradius = value; }
-        }
-
-        fraktal _Fraktalwahl;
-        public fraktal Fractal
-        {
-            get { return _Fraktalwahl; }
-            set { _Fraktalwahl = value; }
+            get { return _settings; }
+            set { _settings = value; }
         }
 
         
@@ -83,6 +41,7 @@ namespace Mandelbrot
         public Form1()
         {
             InitializeComponent();
+            
         }
         #endregion
       
@@ -197,6 +156,11 @@ namespace Mandelbrot
             paint();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+           Task t1 = Task.Run(() => { Logic.CalculateBitmap(dBitmap, resulution, zoom, xDifference, yDifference, convergenzRadius, Fractal, iteration); });
+        }
+
         #endregion
 
         #region helper
@@ -207,9 +171,10 @@ namespace Mandelbrot
             Refresh();
         }
 
+
         #endregion
 
-
+       
     }
 
 }

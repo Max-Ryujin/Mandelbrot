@@ -50,7 +50,7 @@ namespace Mandelbrot
                     double xwert = ((x - (resulution / 2.0)) / (zoom * 100.0)) + (xMovement);
                     double ywert = ((y - (resulution / 2.0)) / (zoom * 100.0)) + (yMovement);
                     //Calculate Pixel Color 
-                    PixelTasks.Add(mandelbrot(xwert, ywert, radius, iteration));
+                    PixelTasks.Add(mandelbrot(xwert, ywert, radius, iteration,x,y));
                 }
                 double xx = x;
             }
@@ -100,7 +100,7 @@ namespace Mandelbrot
             return -1;
         }
 
-        public static async Task<Pixel> mandelbrot(double x, double y, double radius, int iteration)
+        public static async Task<Pixel> mandelbrot(double x, double y, double radius, int iteration,int xpixel,int ypixel)
         {
             double xx = 0;
             double yy = 0;
@@ -112,13 +112,13 @@ namespace Mandelbrot
                 yy = 2 * xtemp * yy + y;
                 if (betrag(xx, yy) > radius)
                 {
-                    return i;
+                    return new Pixel(xpixel,ypixel,calculateColor(i));
 
 
                 }
             }
 
-            return -1;
+            return new Pixel(xpixel,ypixel,calculateColor(-1));
         }
 
         public static double betrag(double x, double y)

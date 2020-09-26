@@ -11,4 +11,19 @@ namespace Mandelbrot
         Mandelbrot,
         Julia
     }
+
+    public enum FractalColor
+    {
+        Total,
+        Red,
+        Green,
+        Blue
+    }
+
+    public enum ColorResulution
+    {
+        Thin,
+        Normal,
+        Thick
+    }
 }
