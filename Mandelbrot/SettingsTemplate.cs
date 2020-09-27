@@ -10,29 +10,77 @@ namespace Mandelbrot
     {
         #region fields
 
-        public fraktal fractal;
+        public fraktal fractal
+        {
+            get;
+            set;
+        }
 
-        public int zoom;
+        public int zoom
+        {
+            get;
+            set;
+        }
 
-        public double xDifference;
+        public double xDifference
+        {
+            get;
+            set;
+        }
 
-        public double yDifference;
+        public double yDifference
+        {
+            get;
+            set;
+        }
 
-        public int resulution;
+        public int resulution
+        {
+            get;
+            set;
+        }
 
-        public int iteration;
+        public int iteration
+        {
+            get;
+            set;
+        }
 
-        public int radius;
+        public int radius
+        {
+            get;
+            set;
+        }
 
-        public FractalColor fractalColor;
+        public FractalColor fractalColor
+        {
+            get;
+            set;
+        }
 
-        public double juliaX;
+        public double juliaX
+        {
+            get;
+            set;
+        }
 
-        public double juliaY;
+        public double juliaY
+        {
+            get;
+            set;
+        }
 
-        public ColorResulution colorResulution;
+        public ColorResulution colorResulution
+        {
+            get;
+            set;
+        }
 
-        public InnerColor innerColor;
+        public InnerColor innerColor
+        {
+            get;
+            set;
+        }
 
         #endregion
 

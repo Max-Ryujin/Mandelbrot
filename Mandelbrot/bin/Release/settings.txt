@@ -1,0 +1,1 @@
+{"fractal":0,"zoom":2,"xDifference":-0.40000000000000002,"yDifference":0,"resulution":1000,"iteration":200,"radius":50,"fractalColor":3,"juliaX":0,"juliaY":0,"colorResulution":1,"innerColor":0}

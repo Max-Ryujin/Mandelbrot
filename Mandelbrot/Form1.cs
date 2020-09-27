@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Windows.Forms;
-using System.Threading;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using Json.Net;
+using System.Text.Json;
 using System.IO;
-
-
-
-
 
 namespace Mandelbrot
 {
@@ -46,18 +38,21 @@ namespace Mandelbrot
             try
             {
                 StreamReader sr = File.OpenText("settings.txt");
-                settings = JsonNet.Deserialize<SettingsTemplate>(sr.ReadToEnd());
+                settings = JsonSerializer.Deserialize<SettingsTemplate>(sr.ReadToEnd());
                 sr.Close();
                 CalculateUI();
+                Logic.CalculateBitmap(dBitmap, settings);
+                paint();
             }
             catch(Exception ex)
             {
                 settings = new SettingsTemplate();
                 StreamWriter streamWriter = File.CreateText("settings.txt");
-                JsonSerializer jsonSerializer = new JsonSerializer();
-                streamWriter.Write(JsonNet.Serialize(_settings));
+                streamWriter.Write(JsonSerializer.Serialize(_settings));
                 streamWriter.Close();
-               
+                CalculateUI();
+                Logic.CalculateBitmap(dBitmap, settings);
+                paint();
             }
         }
         #endregion
@@ -66,8 +61,7 @@ namespace Mandelbrot
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Logic.CalculateBitmap(dBitmap, settings);
-            paint();
+           
         }
 
         private async void ZoomTextbox_TextChanged(object sender, EventArgs e)
@@ -264,8 +258,7 @@ namespace Mandelbrot
         private void serializeSettings()
         {
             StreamWriter streamWriter = new StreamWriter("settings.txt");
-            JsonSerializer jsonSerializer = new JsonSerializer();
-            streamWriter.Write(JsonNet.Serialize(_settings));
+            streamWriter.Write(JsonSerializer.Serialize<SettingsTemplate>(settings));
             streamWriter.Close();
         }
 
