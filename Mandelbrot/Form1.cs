@@ -48,6 +48,7 @@ namespace Mandelbrot
                 StreamReader sr = File.OpenText("settings.txt");
                 settings = JsonNet.Deserialize<SettingsTemplate>(sr.ReadToEnd());
                 sr.Close();
+                CalculateUI();
             }
             catch(Exception ex)
             {
@@ -79,6 +80,7 @@ namespace Mandelbrot
                     settings.zoom = result;
                     await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                     paint();
+                    Task.Run(() => serializeSettings());
                 }
             }
             catch(Exception ex)
@@ -87,7 +89,7 @@ namespace Mandelbrot
             }
         }
 
-        private void xValueTextbox_TextChanged(object sender, EventArgs e)
+        private async void xValueTextbox_TextChanged(object sender, EventArgs e)
         {
             try
             {
@@ -95,8 +97,9 @@ namespace Mandelbrot
                 if (Int32.TryParse(xValueTextbox.Text, out result))
                 {
                     settings.xDifference = result;
-                    Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                    await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                     paint();
+                    Task.Run(() => serializeSettings());
                 }
                 
             }
@@ -116,6 +119,7 @@ namespace Mandelbrot
                     settings.yDifference = result;
                     await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                     paint();
+                    Task.Run(() => serializeSettings());
                 }
             }
             catch (Exception ex)
@@ -134,6 +138,7 @@ namespace Mandelbrot
                     settings.resulution = result;
                     await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                     paint();
+                    Task.Run(() => serializeSettings());
                 }
             }
             catch (Exception ex)
@@ -160,21 +165,89 @@ namespace Mandelbrot
             }
         }
 
-        public void ColorManagement_PropertyChanged_Event(object sender, EventArgs e)
+        public async void ColorManagement_PropertyChanged_Event(object sender, EventArgs e)
         {
-            
-        }
+            if (innerColorBlackButton.Checked)
+            {
+                settings.innerColor = Mandelbrot.InnerColor.Black;
+            }
+            else
+            {
+                settings.innerColor = Mandelbrot.InnerColor.White;
+            }
 
-        private async void PictureBox_PropertyChange(object sender, EventArgs e)
-        {
+            if(thickColorButton.Checked)
+            {
+                settings.colorResulution = ColorResulution.Thick;
+            }
+            else if(thinColorButton.Checked)
+            {
+                settings.colorResulution = ColorResulution.Thin;
+            }
+            else
+            {
+                settings.colorResulution = ColorResulution.Normal;
+            }
+
+            if(totalColorButton.Checked)
+            {
+                settings.fractalColor = FractalColor.Total;
+            }
+            else if(greenColorButton.Checked)
+            {
+                settings.fractalColor = FractalColor.Green;
+            }
+            else if(blueColorButton.Checked)
+            {
+                settings.fractalColor = FractalColor.Blue;
+            }
+            else
+            {
+                settings.fractalColor = FractalColor.Red;
+            }
             await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
             paint();
+            Task.Run(() => serializeSettings());
         }
 
         private async void button1_Click(object sender, EventArgs e)
         {
             await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
             paint();
+            settings.iteration += 100;
+            CalculateUI();
+        }
+
+        private async void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                double locationY = e.Location.Y * (settings.resulution / 1000.0);
+                double locationX = e.Location.X * (settings.resulution / 1000.0);
+
+                settings.xDifference = ((locationX - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
+                settings.yDifference = ((locationY - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
+                settings.zoom = settings.zoom * 2;
+                settings.iteration += 100;
+                CalculateUI();
+                await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                paint();
+                Task.Run(() => serializeSettings());
+            }
+            else if(e.Button == MouseButtons.Right)
+            {
+                double locationY = e.Location.Y * (settings.resulution / 1000.0);
+                double locationX = e.Location.X * (settings.resulution / 1000.0);
+
+                settings.xDifference = ((locationX - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
+                settings.yDifference = ((locationY - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
+                settings.zoom = (int)(settings.zoom * 0.5);
+                settings.iteration += 100;
+                CalculateUI();
+                await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                paint();
+                Task.Run(() => serializeSettings());
+            }
         }
 
         #endregion
@@ -193,12 +266,60 @@ namespace Mandelbrot
             StreamWriter streamWriter = new StreamWriter("settings.txt");
             JsonSerializer jsonSerializer = new JsonSerializer();
             streamWriter.Write(JsonNet.Serialize(_settings));
+            streamWriter.Close();
+        }
+
+        private void CalculateUI()
+        {
+            ZoomTextbox.Text = settings.zoom.ToString();
+            xValueTextbox.Text = settings.xDifference.ToString();
+            yValueTextbox.Text = settings.yDifference.ToString();
+            resulutionTextbox.Text = settings.resulution.ToString();
+            ConvergenzRadiusTextbox.Text = settings.radius.ToString();
+            if(settings.innerColor == Mandelbrot.InnerColor.Black)
+            {
+                innerColorBlackButton.Checked = true;
+                innerColorWhiteButton.Checked = false;
+            }
+            else
+            {
+                innerColorWhiteButton.Checked = true;
+                innerColorBlackButton.Checked = false;
+            }
+            switch(settings.fractalColor)
+            {
+                case FractalColor.Total:
+                    totalColorButton.Checked = true;
+                    break;
+                case FractalColor.Red:
+                    redColorButton.Checked = true;
+                    break;
+                case FractalColor.Blue:
+                    blueColorButton.Checked = true;
+                    break;
+                case FractalColor.Green:
+                    greenColorButton.Checked = true;
+                    break;
+            }
+            if(settings.colorResulution == ColorResulution.Normal)
+            {
+                normalColorButton.Checked = true;
+            }
+            else if(settings.colorResulution == ColorResulution.Thin)
+            {
+                thinColorButton.Checked = true;
+            }
+            else
+            {
+                thickColorButton.Checked = true;
+            }
+
         }
 
 
         #endregion
 
-       
+        
     }
 
 }

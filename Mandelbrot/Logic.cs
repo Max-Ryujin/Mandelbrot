@@ -39,16 +39,15 @@ namespace Mandelbrot
             
             for (int x = 0; x < settings.resulution; x++)
             {
+                double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
 
-                    for (int y = 0; y < settings.resulution; y++)
+                for (int y = 0; y < settings.resulution; y++)
                     {
-                        // Calulate PixelPosition
-                        double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
+                        // Calulate PixelPosition                      
                         double ywert = ((y - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
-                        //Calculate Pixel Color 
-                        mandelbrot(dMap, xwert, ywert, settings, x, y);
+                    //Calculate Pixel Color 
+                     mandelbrot(dMap, xwert, ywert, settings, x, y);
                     }
-                double xx = x;
             }
            
         }
