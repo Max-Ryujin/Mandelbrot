@@ -10,27 +10,29 @@ namespace Mandelbrot
     {
         #region fields
 
-        fraktal fractal;
+        public fraktal fractal;
 
-        int zoom;
+        public int zoom;
 
-        double xDifference;
+        public double xDifference;
 
-        double yDifference;
+        public double yDifference;
 
-        int resulution;
+        public int resulution;
 
-        int iteration;
+        public int iteration;
 
-        int radius;
+        public int radius;
 
-        FractalColor fractalColor;
+        public FractalColor fractalColor;
 
-        double juliaX;
+        public double juliaX;
 
-        double juliaY;
+        public double juliaY;
 
-        ColorResulution colorResulution;
+        public ColorResulution colorResulution;
+
+        public InnerColor innerColor;
 
         #endregion
 
@@ -49,6 +51,19 @@ namespace Mandelbrot
             this.juliaX = juliaX;
             this.juliaY = juliaY;
             this.colorResulution = colorResulution;
+        }
+
+        public SettingsTemplate()
+        {
+            fractal = fraktal.Mandelbrot;
+            xDifference = -0.4;
+            yDifference = 0;
+            zoom = 2;
+            resulution = 1000;
+            iteration = 200;
+            radius = 50;
+            fractalColor = FractalColor.Blue;
+            colorResulution = ColorResulution.Normal;
         }
 
         #endregion

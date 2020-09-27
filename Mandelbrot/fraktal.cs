@@ -26,4 +26,10 @@ namespace Mandelbrot
         Normal,
         Thick
     }
+
+    public enum InnerColor
+    {
+        White,
+        Black
+    }
 }

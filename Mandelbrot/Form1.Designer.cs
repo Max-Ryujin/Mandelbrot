@@ -64,10 +64,7 @@
             this.InnerColor = new System.Windows.Forms.GroupBox();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.button2 = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.label11 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.radioButton13 = new System.Windows.Forms.RadioButton();
             this.radioButton12 = new System.Windows.Forms.RadioButton();
@@ -94,10 +91,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1068, 599);
+            this.button1.Location = new System.Drawing.Point(1099, 536);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 61);
+            this.button1.Size = new System.Drawing.Size(330, 126);
             this.button1.TabIndex = 1;
             this.button1.Text = "Paint";
             this.button1.UseVisualStyleBackColor = true;
@@ -489,33 +486,6 @@
             this.radioButton3.Text = "Black";
             this.radioButton3.UseVisualStyleBackColor = true;
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(1193, 599);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(111, 61);
-            this.button2.TabIndex = 25;
-            this.button2.Text = "Save";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // label11
-            // 
-            this.label11.AutoEllipsis = true;
-            this.label11.Cursor = System.Windows.Forms.Cursors.Default;
-            this.label11.Location = new System.Drawing.Point(1065, 523);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(300, 50);
-            this.label11.TabIndex = 26;
-            this.label11.Text = "Tipp: Verringere die Auflösung wähend  du dich durch die Menge bewegst und erhöhe" +
-    " sie wieder wenn du am ziel angekommen bist";
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(1068, 731);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(349, 23);
-            this.progressBar1.TabIndex = 27;
-            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.radioButton13);
@@ -558,11 +528,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1514, 664);
+            this.ClientSize = new System.Drawing.Size(1514, 762);
             this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.ConvergenzRadiusTextbox);
@@ -641,15 +608,12 @@
         private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.RadioButton radioButton7;
         private System.Windows.Forms.RadioButton radioButton6;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.RadioButton radioButton10;
         private System.Windows.Forms.RadioButton radioButton9;
         private System.Windows.Forms.RadioButton radioButton8;
         private System.Windows.Forms.RadioButton radioButton11;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.RadioButton radioButton13;
         private System.Windows.Forms.RadioButton radioButton12;
