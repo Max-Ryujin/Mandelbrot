@@ -53,6 +53,14 @@ namespace Mandelbrot
             this.colorResulution = colorResulution;
         }
 
+        public SettingsTemplate()
+        {
+            zoom = 2;
+            resulution = 1000;
+            iteration = 500;
+            radius = 30;
+        }
+
         #endregion
     }
 }

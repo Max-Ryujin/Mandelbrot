@@ -51,11 +51,12 @@ namespace Mandelbrot
             }
             catch(Exception ex)
             {
-               StreamWriter streamWriter = File.CreateText("settings.txt");
+                settings = new SettingsTemplate();
+                StreamWriter streamWriter = File.CreateText("settings.txt");
                 JsonSerializer jsonSerializer = new JsonSerializer();
                 streamWriter.Write(JsonNet.Serialize(_settings));
                 streamWriter.Close();
-                settings = new SettingsTemplate()
+               
             }
         }
         #endregion
@@ -67,7 +68,7 @@ namespace Mandelbrot
 
         }
 
-        private void ZoomTextbox_TextChanged(object sender, EventArgs e)
+        private async void ZoomTextbox_TextChanged(object sender, EventArgs e)
         {
             try
             {
@@ -75,12 +76,8 @@ namespace Mandelbrot
                 if (Int32.TryParse(ZoomTextbox.Text, out result))
                 {
                     settings.zoom = result;
-                    Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                    await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                     paint();
-                }
-                else
-                {
-                    ZoomTextbox.Text = "Fehler";
                 }
             }
             catch(Exception ex)
@@ -100,10 +97,7 @@ namespace Mandelbrot
                     Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                     paint();
                 }
-                else
-                {
-                    xValueTextbox.Text = "Fehler";
-                }
+                
             }
             catch (Exception ex)
             {
@@ -111,7 +105,7 @@ namespace Mandelbrot
             }
         }
 
-        private void yValueTextbox_TextChanged(object sender, EventArgs e)
+        private async void yValueTextbox_TextChanged(object sender, EventArgs e)
         {
             try
             {
@@ -119,12 +113,8 @@ namespace Mandelbrot
                 if (Int32.TryParse(yValueTextbox.Text, out result))
                 {
                     settings.yDifference = result;
-                    Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                    await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                     paint();
-                }
-                else
-                {
-                    yValueTextbox.Text = "Fehler";
                 }
             }
             catch (Exception ex)
@@ -133,7 +123,7 @@ namespace Mandelbrot
             }
         }
 
-        private void resulutionTextbox_TextChanged(object sender, EventArgs e)
+        private async void resulutionTextbox_TextChanged(object sender, EventArgs e)
         {
             try
             {
@@ -141,12 +131,8 @@ namespace Mandelbrot
                 if (Int32.TryParse(resulutionTextbox.Text, out result))
                 {
                     settings.resulution = result;
-                    Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                    await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                     paint();
-                }
-                else
-                {
-                    resulutionTextbox.Text = "Fehler";
                 }
             }
             catch (Exception ex)
@@ -178,15 +164,16 @@ namespace Mandelbrot
             
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-           Task t1 = Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+            await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
             paint();
         }
 
         #endregion
 
         #region helper
+
 
         private void paint()
         {

@@ -39,26 +39,21 @@ namespace Mandelbrot
             }
         }
 
-        static async void calculateMandelbrot(DirectBitmap dMap, SettingsTemplate settings)
+        static void calculateMandelbrot(DirectBitmap dMap, SettingsTemplate settings)
         {
-            List<Task<Pixel>> PixelTasks = new List<Task<Pixel>>();
+            
             for (int x = 0; x < settings.resulution; x++)
             {
-                for (int y = 0; y < settings.resulution; y++)
-                {
-                    // Calulate PixelPosition
-                    double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
-                    double ywert = ((y - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
-                    //Calculate Pixel Color 
-                    PixelTasks.Add(mandelbrot(xwert, ywert, settings,x,y));
-                }
+
+                    for (int y = 0; y < settings.resulution; y++)
+                    {
+                        // Calulate PixelPosition
+                        double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
+                        double ywert = ((y - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
+                        //Calculate Pixel Color 
+                        mandelbrot(dMap, xwert, ywert, settings, x, y);
+                    }
                 double xx = x;
-            }
-            while(PixelTasks.Count > 0)
-            {
-                Task<Pixel> finishedTask = await Task.WhenAny(PixelTasks);
-                Pixel pixel = finishedTask.Result;
-                dMap.SetPixel(pixel.x, pixel.y, pixel.color);
             }
            
         }
@@ -98,7 +93,7 @@ namespace Mandelbrot
         //    return -1;
         //}
 
-        public static async Task<Pixel> mandelbrot(double x, double y, SettingsTemplate settings,int xpixel,int ypixel)
+        public static void mandelbrot(DirectBitmap dmap, double x, double y, SettingsTemplate settings,int xpixel,int ypixel)
         {
             double xx = 0;
             double yy = 0;
@@ -110,11 +105,12 @@ namespace Mandelbrot
                 yy = 2 * xtemp * yy + y;
                 if (betrag(xx, yy) > settings.radius)
                 {
-                    return new Pixel(xpixel,ypixel,calculateColor(i,settings));
+                    dmap.SetPixel(xpixel,ypixel,calculateColor(i,settings));
+                    return;
                 }
             }
 
-            return new Pixel(xpixel,ypixel,calculateColor(-1,settings));
+            dmap.SetPixel(xpixel, ypixel, calculateColor(-1, settings));
         }
 
         public static double betrag(double x, double y)
