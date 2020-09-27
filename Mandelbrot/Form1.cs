@@ -4,6 +4,10 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Threading;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using Json.Net;
+using System.IO;
+
 
 
 
@@ -14,71 +18,22 @@ namespace Mandelbrot
     {
         #region fields
 
-        private DirectBitmap _dBitmap;
+        private DirectBitmap _dBitmap = new DirectBitmap(1000,1000);
         public DirectBitmap dBitmap
         {
             get { return _dBitmap; }
-            set { _dBitmap = value; }
-        }
-
-        private int _iteration;
-        public int iteration
-        {
-            get { return _iteration; }
-            set { _iteration = value; }
-        }
-
-        private double _zoomValue;
-        public double zoomValue
-        {
-            get { return _zoomValue; }
-            set { _zoomValue = value; }
-        }
-
-        private double _xverschiebung = 0;
-        public double xDifference
-        {
-            get { return _xverschiebung; }
-            set { _xverschiebung = value; }
-        }
-
-        private double _yverschiebung = 0;
-        public double yDifference
-        {
-            get { return _yverschiebung; }
-            set { _yverschiebung = value; }
-        }
-
-        private int _auflösung;
-        public int resulution
-        {
-            get { return _auflösung; }
             set
             {
-                _auflösung = value;
-                dBitmap.Dispose();
-                dBitmap = new DirectBitmap(_auflösung, _auflösung);
+                _dBitmap = value;
+                paint();
             }
         }
 
- 
-        private int _konvergenzradius;
-        public int convergenzRadius
+        private SettingsTemplate _settings;
+        public SettingsTemplate settings
         {
-            get { return _konvergenzradius; }
-            set { _konvergenzradius = value; }
-        }
-
-        fraktal _Fraktalwahl;
-        public enum fraktal
-        {
-            Mandelbrot,
-            Julia
-        }
-        public fraktal Fractal
-        {
-            get { return _Fraktalwahl; }
-            set { _Fraktalwahl = value; }
+            get { return _settings; }
+            set { _settings = value; }
         }
 
         
@@ -88,6 +43,20 @@ namespace Mandelbrot
         public Form1()
         {
             InitializeComponent();
+            try
+            {
+                StreamReader sr = File.OpenText("settings.txt");
+                settings = JsonNet.Deserialize<SettingsTemplate>(sr.ReadToEnd());
+                sr.Close();
+            }
+            catch(Exception ex)
+            {
+               StreamWriter streamWriter = File.CreateText("settings.txt");
+                JsonSerializer jsonSerializer = new JsonSerializer();
+                streamWriter.Write(JsonNet.Serialize(_settings));
+                streamWriter.Close();
+                settings = new SettingsTemplate()
+            }
         }
         #endregion
       
@@ -105,7 +74,9 @@ namespace Mandelbrot
                 int result;
                 if (Int32.TryParse(ZoomTextbox.Text, out result))
                 {
-                    zoomValue = result;
+                    settings.zoom = result;
+                    Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                    paint();
                 }
                 else
                 {
@@ -125,7 +96,9 @@ namespace Mandelbrot
                 int result;
                 if (Int32.TryParse(xValueTextbox.Text, out result))
                 {
-                    xDifference = result;
+                    settings.xDifference = result;
+                    Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                    paint();
                 }
                 else
                 {
@@ -145,7 +118,9 @@ namespace Mandelbrot
                 int result;
                 if (Int32.TryParse(yValueTextbox.Text, out result))
                 {
-                    yDifference = result;
+                    settings.yDifference = result;
+                    Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                    paint();
                 }
                 else
                 {
@@ -165,7 +140,9 @@ namespace Mandelbrot
                 int result;
                 if (Int32.TryParse(resulutionTextbox.Text, out result))
                 {
-                    resulution = result;
+                    settings.resulution = result;
+                    Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+                    paint();
                 }
                 else
                 {
@@ -196,38 +173,38 @@ namespace Mandelbrot
             }
         }
 
+        public void ColorManagement_PropertyChanged_Event(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+           Task t1 = Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+            paint();
+        }
+
         #endregion
 
         #region helper
 
-        private void paint(int[,] smap, int workernumber)
+        private void paint()
         {
             pictureBox1.Image = dBitmap.Bitmap;
             Refresh();
         }
 
-        public void CalculateBitmap()
+        private void serializeSettings()
         {
-            try
-            {
-                if (Fractal == fraktal.Mandelbrot)
-                {
-
-                }
-                else
-                {
-
-                }
-            }
-            catch(Exception ex)
-            {
-
-            }
+            StreamWriter streamWriter = new StreamWriter("settings.txt");
+            JsonSerializer jsonSerializer = new JsonSerializer();
+            streamWriter.Write(JsonNet.Serialize(_settings));
         }
+
 
         #endregion
 
-
+       
     }
 
 }
