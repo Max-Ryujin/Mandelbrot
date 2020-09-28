@@ -71,10 +71,7 @@ namespace Mandelbrot
                 int result;
                 if (Int32.TryParse(ZoomTextbox.Text, out result))
                 {
-                    settings.zoom = result;
-                    await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
-                    paint();
-                    Task.Run(() => serializeSettings());
+                    settings.zoom = result;                  
                 }
             }
             catch(Exception ex)
@@ -91,9 +88,6 @@ namespace Mandelbrot
                 if (Int32.TryParse(xValueTextbox.Text, out result))
                 {
                     settings.xDifference = result;
-                    await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
-                    paint();
-                    Task.Run(() => serializeSettings());
                 }
                 
             }
@@ -111,9 +105,6 @@ namespace Mandelbrot
                 if (Int32.TryParse(yValueTextbox.Text, out result))
                 {
                     settings.yDifference = result;
-                    await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
-                    paint();
-                    Task.Run(() => serializeSettings());
                 }
             }
             catch (Exception ex)
@@ -130,9 +121,6 @@ namespace Mandelbrot
                 if (Int32.TryParse(resulutionTextbox.Text, out result))
                 {
                     settings.resulution = result;
-                    await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
-                    paint();
-                    Task.Run(() => serializeSettings());
                 }
             }
             catch (Exception ex)
@@ -140,6 +128,26 @@ namespace Mandelbrot
                 resulutionTextbox.Text = "Error";
             }
 
+        }
+
+        private void iterationTextbox_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int result;
+                if (Int32.TryParse(iterationTextbox.Text, out result))
+                {
+                    if(result < 100)
+                    {
+                     iterationTextbox.Text = ""+100;
+                    }
+                    settings.iteration = result;
+                }
+            }
+            catch (Exception ex)
+            {
+                resulutionTextbox.Text = "Error";
+            }
         }
 
         private void RadioButtonSetting_CheckedChanged(object sender, EventArgs e)
@@ -208,7 +216,6 @@ namespace Mandelbrot
         {
             await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
             paint();
-            settings.iteration += 100;
             CalculateUI();
         }
 
@@ -236,7 +243,7 @@ namespace Mandelbrot
                 settings.xDifference = ((locationX - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
                 settings.yDifference = ((locationY - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
                 settings.zoom = (int)(settings.zoom * 0.5);
-                settings.iteration += 100;
+                settings.iteration -= 100;
                 CalculateUI();
                 await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
                 paint();
@@ -269,6 +276,7 @@ namespace Mandelbrot
             yValueTextbox.Text = settings.yDifference.ToString();
             resulutionTextbox.Text = settings.resulution.ToString();
             ConvergenzRadiusTextbox.Text = settings.radius.ToString();
+            iterationTextbox.Text = settings.iteration.ToString();
             if(settings.innerColor == Mandelbrot.InnerColor.Black)
             {
                 innerColorBlackButton.Checked = true;
@@ -309,10 +317,8 @@ namespace Mandelbrot
 
         }
 
-
         #endregion
 
-        
     }
 
 }

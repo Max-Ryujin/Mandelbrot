@@ -200,6 +200,7 @@
             this.iterationTextbox.Size = new System.Drawing.Size(52, 20);
             this.iterationTextbox.TabIndex = 11;
             this.iterationTextbox.Text = "200";
+            this.iterationTextbox.TextChanged += new System.EventHandler(this.iterationTextbox_TextChanged);
             // 
             // trackBar1
             // 
