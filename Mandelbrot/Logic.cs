@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Mandelbrot
@@ -22,7 +23,7 @@ namespace Mandelbrot
                 }
                 else
                 {
-                   // calculateJulia(resulution, dBitmap, radius, zoom, xMovement, yMovement);
+                   // calculateJulia(dBitmap, settings);
                 }
             }
             catch (Exception ex)
@@ -33,29 +34,27 @@ namespace Mandelbrot
         
         static void calculateMandelbrot(DirectBitmap dMap, SettingsTemplate settings)
         {
-            Task[] WorkerList = new Task[10];
-            for (int i = 0; i < 10; i++)
-            {
-                int worker = i;
-                WorkerList[worker] = (Task.Run(() => calculateMandelbrotrow(dMap, settings, worker)));
-            }
-            Task.WaitAll(WorkerList);
+            Parallel.For(1, 1000001, ((i) => calculateMandelbrotrow(dMap, settings, i)));
+            //Task[] WorkerList = new Task[10];
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    int worker = i;
+            //    WorkerList[worker] = (Task.Run(() => calculateMandelbrotrow(dMap, settings, worker)));
+            //}
+            //Task.WaitAll(WorkerList);
         }
         static private void calculateMandelbrotrow(DirectBitmap dMap,SettingsTemplate settings,int workerNumber)
         {
-            for (int x = 0; x < settings.resulution; x++)
-            {
-                double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
+            int x = workerNumber / 1000;
+            int y = workerNumber % 1000;
+            // Calulate PixelPosition   
+            double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
+            double ywert = ((y - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + settings.yDifference;
+                       
+            mandelbrot(dMap, xwert, ywert, settings, x, y);
+                    
 
-                for (int y = workerNumber; y < settings.resulution; y+=10)
-                {
-                    // Calulate PixelPosition                      
-                    double ywert = ((y - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + settings.yDifference;
-                    //Calculate Pixel Color 
-                    mandelbrot(dMap, xwert, ywert, settings, x, y);
-                }
-
-            }
+ 
         }
 
         //private static void calculateJulia()

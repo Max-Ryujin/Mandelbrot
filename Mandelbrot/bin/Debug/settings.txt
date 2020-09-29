@@ -1,1 +1,1 @@
-{"fractal":0,"zoom":16384,"xDifference":-1.206589660644531,"yDifference":-0.31674285888671894,"resulution":1000,"iteration":1600,"radius":50,"fractalColor":0,"juliaX":0,"juliaY":0,"colorResulution":1,"innerColor":0}
+{"fractal":0,"zoom":8192,"xDifference":-0.16267456054687596,"yDifference":-1.0405737304687506,"resulution":1000,"iteration":1400,"radius":50,"fractalColor":1,"juliaX":0,"juliaY":0,"colorResulution":1,"innerColor":0}

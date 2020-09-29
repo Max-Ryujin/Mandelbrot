@@ -16,10 +16,20 @@ namespace Mandelbrot
             set;
         }
 
+        private int _zoom;
         public int zoom
         {
-            get;
-            set;
+            get               
+            {
+                return _zoom;
+            }
+            set 
+            {
+                if(value >= 1)
+                {
+                    _zoom = value;
+                }
+            }
         }
 
         public double xDifference
@@ -40,10 +50,20 @@ namespace Mandelbrot
             set;
         }
 
+        private int _iteration;
         public int iteration
         {
-            get;
-            set;
+            get
+            {
+                return _iteration;
+            }
+            set
+            {
+                if(value>2)
+                {
+                    _iteration = value;
+                }
+            }
         }
 
         public int radius

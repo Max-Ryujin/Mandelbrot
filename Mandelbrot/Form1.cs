@@ -71,8 +71,14 @@ namespace Mandelbrot
                 int result;
                 if (Int32.TryParse(ZoomTextbox.Text, out result))
                 {
-                    settings.zoom = result;                  
+                    if(result < 1)
+                    {
+                        settings.zoom = 1;
+                    }
+                    settings.zoom = result;
+                    
                 }
+                
             }
             catch(Exception ex)
             {
@@ -214,9 +220,10 @@ namespace Mandelbrot
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            CalculateUI();
             await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
             paint();
-            CalculateUI();
+            
         }
 
         private async void pictureBox1_MouseClick(object sender, MouseEventArgs e)
