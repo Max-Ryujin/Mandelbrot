@@ -45,7 +45,7 @@ namespace Mandelbrot
         }
         static private void calculateMandelbrotrow(DirectBitmap dMap,SettingsTemplate settings,int workerNumber)
         {
-            int x = workerNumber / 1000;
+            int x = workerNumber / 1000;  // TODO change res to 1024 to use shifts. calculate zoom outside.
             int y = workerNumber % 1000;
             // Calulate PixelPosition   
             double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
