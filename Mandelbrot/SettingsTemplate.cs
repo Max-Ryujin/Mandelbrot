@@ -127,9 +127,9 @@ namespace Mandelbrot
             xDifference = -0.4;
             yDifference = 0;
             zoom = 2;
-            resulution = 1000;
+            resulution = 1024;
             iteration = 200;
-            radius = 50;
+            radius = 4;
             fractalColor = FractalColor.Blue;
             colorResulution = ColorResulution.Normal;
         }

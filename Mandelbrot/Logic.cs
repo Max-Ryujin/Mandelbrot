@@ -34,7 +34,8 @@ namespace Mandelbrot
         
         static void calculateMandelbrot(DirectBitmap dMap, SettingsTemplate settings)
         {
-            Parallel.For(1, 1000001, ((i) => calculateMandelbrotrow(dMap, settings, i)));
+            int zoomValue = settings.zoom * 100;
+            Parallel.For(1, 1048577, ((i) => calculateMandelbrotPixel(dMap, settings, i,zoomValue)));
             //Task[] WorkerList = new Task[10];
             //for (int i = 0; i < 10; i++)
             //{
@@ -43,13 +44,13 @@ namespace Mandelbrot
             //}
             //Task.WaitAll(WorkerList);
         }
-        static private void calculateMandelbrotrow(DirectBitmap dMap,SettingsTemplate settings,int workerNumber)
+        static private void calculateMandelbrotPixel(DirectBitmap dMap,SettingsTemplate settings,int workerNumber,int zoom)
         {
-            int x = workerNumber / 1000;  // TODO change res to 1024 to use shifts. calculate zoom outside.
-            int y = workerNumber % 1000;
+            int x = workerNumber / 1024;  // TODO change res to 1024 to use shifts. calculate zoom outside.
+            int y = workerNumber % 1024;
             // Calulate PixelPosition   
-            double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
-            double ywert = ((y - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + settings.yDifference;
+            double xwert = ((x - (settings.resulution / 2.0)) / zoom) + (settings.xDifference);
+            double ywert = ((y - (settings.resulution / 2.0)) / zoom) + settings.yDifference;
                        
             mandelbrot(dMap, xwert, ywert, settings, x, y);
                     

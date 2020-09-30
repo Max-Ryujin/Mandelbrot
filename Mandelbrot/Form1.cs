@@ -10,7 +10,7 @@ namespace Mandelbrot
     {
         #region fields
 
-        private DirectBitmap _dBitmap = new DirectBitmap(1000,1000);
+        private DirectBitmap _dBitmap = new DirectBitmap(1024,1024);
         public DirectBitmap dBitmap
         {
             get { return _dBitmap; }
@@ -156,6 +156,26 @@ namespace Mandelbrot
             }
         }
 
+        private void ConvergenzRadiusTextbox_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int result;
+                if (Int32.TryParse(ConvergenzRadiusTextbox.Text, out result))
+                {
+                    if (result < 4)
+                    {
+                        ConvergenzRadiusTextbox.Text = "" + 4;
+                    }
+                    settings.radius = result;
+                }
+            }
+            catch (Exception ex)
+            {
+                resulutionTextbox.Text = "Error";
+            }
+        }
+
         private void RadioButtonSetting_CheckedChanged(object sender, EventArgs e)
         {
             if (!radioButton12.Checked)
@@ -230,8 +250,8 @@ namespace Mandelbrot
         {
             if (e.Button == MouseButtons.Left)
             {
-                double locationY = e.Location.Y * (settings.resulution / 1000.0);
-                double locationX = e.Location.X * (settings.resulution / 1000.0);
+                double locationY = e.Location.Y * (settings.resulution / 1024.0);
+                double locationX = e.Location.X * (settings.resulution / 1024.0);
 
                 settings.xDifference = ((locationX - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
                 settings.yDifference = ((locationY - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
@@ -244,8 +264,8 @@ namespace Mandelbrot
             }
             else if(e.Button == MouseButtons.Right)
             {
-                double locationY = e.Location.Y * (settings.resulution / 1000.0);
-                double locationX = e.Location.X * (settings.resulution / 1000.0);
+                double locationY = e.Location.Y * (settings.resulution / 1024.0);
+                double locationX = e.Location.X * (settings.resulution / 1024.0);
 
                 settings.xDifference = ((locationX - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
                 settings.yDifference = ((locationY - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
@@ -326,6 +346,7 @@ namespace Mandelbrot
 
         #endregion
 
+       
     }
 
 }
