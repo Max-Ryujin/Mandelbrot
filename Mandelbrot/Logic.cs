@@ -75,7 +75,7 @@ namespace Mandelbrot
         //    }
         //}
 
-        //public static int julia(double x, double y, double x2, double y2, double m)
+        //public static int juliaPixel(double x, double y, double x2, double y2, double m)
         //{
         //    for (int i = 1; i <= iteration; i++)
         //    {
