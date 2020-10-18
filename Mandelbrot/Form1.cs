@@ -64,6 +64,21 @@ namespace Mandelbrot
            
         }
 
+        private async void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                settings.fractal = fraktal.Mandelbrot;
+            }
+            else
+            {
+                settings.fractal = fraktal.Julia;
+            }
+            await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
+            paint();
+            Task.Run(() => serializeSettings());
+        }
+
         private async void ZoomTextbox_TextChanged(object sender, EventArgs e)
         {
             try
@@ -243,7 +258,8 @@ namespace Mandelbrot
             CalculateUI();
             await Task.Run(() => { Logic.CalculateBitmap(dBitmap, settings); });
             paint();
-            
+            Task.Run(() => serializeSettings());
+
         }
 
         private async void pictureBox1_MouseClick(object sender, MouseEventArgs e)
@@ -276,6 +292,18 @@ namespace Mandelbrot
                 paint();
                 Task.Run(() => serializeSettings());
             }
+        }
+
+        private async void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            settings.juliaX = trackBar1.Value/100.0;
+            labelJuliaX.Text = settings.juliaX.ToString();            
+        }
+
+        private async void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            settings.juliaY = trackBar2.Value/100.0;
+            labelJuliaY.Text = settings.juliaY.ToString();         
         }
 
         #endregion
@@ -343,6 +371,7 @@ namespace Mandelbrot
             }
 
         }
+
 
         #endregion
 

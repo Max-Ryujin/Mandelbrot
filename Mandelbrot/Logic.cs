@@ -23,7 +23,7 @@ namespace Mandelbrot
                 }
                 else
                 {
-                   // calculateJulia(dBitmap, settings);
+                    calculateJulia(dBitmap, settings);
                 }
             }
             catch (Exception ex)
@@ -36,13 +36,6 @@ namespace Mandelbrot
         {
             int zoomValue = settings.zoom * 100;
             Parallel.For(1, 1048577, ((i) => calculateMandelbrotPixel(dMap, settings, i,zoomValue)));
-            //Task[] WorkerList = new Task[10];
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    int worker = i;
-            //    WorkerList[worker] = (Task.Run(() => calculateMandelbrotrow(dMap, settings, worker)));
-            //}
-            //Task.WaitAll(WorkerList);
         }
         static private void calculateMandelbrotPixel(DirectBitmap dMap,SettingsTemplate settings,int workerNumber,int zoom)
         {
@@ -58,40 +51,38 @@ namespace Mandelbrot
  
         }
 
-        //private static void calculateJulia()
-        //{
+        private static void calculateJulia(DirectBitmap dMap, SettingsTemplate settings)
+        {
+            Parallel.For(1, 1048577, ((i) => calculatejuliaPixel(dMap, settings, i)));
+        }
 
-        //    for (int x = identifier; x < resulution; x += 3)
-        //    {
-        //        for (int y = 0; y < resulution; y++)
-        //        {
-        //            double xwert = ((x - (resulution / 2.0)) / (vergrößerung * 100.0)) + (xverschiebung);
-        //            double ywert = ((y - (resulution / 2.0)) / (vergrößerung * 100.0)) + (yverschiebung);
+        public static void calculatejuliaPixel(DirectBitmap dmap, SettingsTemplate settings, int workernumber)
+        {
+            int x = workernumber / 1024;  // TODO change res to 1024 to use shifts. calculate zoom outside.
+            int y = workernumber % 1024;
 
-        //            map[x, y] = julia(xwert, ywert, cx, cy, konvergenzradius);
+            double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
+            double ywert = ((y - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
 
-        //        }
-        //        double xx = x;   
-        //    }
-        //}
+            julia(dmap, settings, x, y, xwert, ywert);
+        }
 
-        //public static int juliaPixel(double x, double y, double x2, double y2, double m)
-        //{
-        //    for (int i = 1; i <= iteration; i++)
-        //    {
-        //        double xtemp = x;
-        //        x = (x * x) - (y * y) + x2;
+        public static void julia(DirectBitmap dmap, SettingsTemplate settings, int xpixel, int ypixel, double x, double y)
+        {
+            for (int i = 1; i <= settings.iteration; i++)
+            {          
+                double xtemp = x;
+                x = (x * x) - (y * y) + settings.juliaX;
 
-        //        y = 2 * xtemp * y + y2;
-        //        if (betrag(x, x) > m)
-        //        {
-        //            return i;
-
-
-        //        }
-        //    }
-        //    return -1;
-        //}
+                y = 2 * xtemp * y + settings.juliaY;
+                if (betrag(x, x) > settings.radius)
+                {
+                    dmap.SetPixel(xpixel, ypixel, calculateColor(i, settings));
+                    return;
+                }
+            }
+            dmap.SetPixel(xpixel, ypixel, calculateColor(-1, settings));
+        }
 
         public static void mandelbrot(DirectBitmap dmap, double x, double y, SettingsTemplate settings,int xpixel,int ypixel)
         {
