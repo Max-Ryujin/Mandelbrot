@@ -370,6 +370,20 @@ namespace Mandelbrot
                 thickColorButton.Checked = true;
             }
 
+            // Fraktal Wahl
+            if(settings.fractal == fraktal.Mandelbrot)
+            {
+                radioButton1.Checked = true;
+            }
+            else
+            {
+                radioButton2.Checked = true;
+            }
+            trackBar1.Value = (int)(settings.juliaX*100);
+            trackBar2.Value = (int)(settings.juliaY * 100);
+            labelJuliaX.Text = (trackBar1.Value/100).ToString();
+            labelJuliaY.Text = (trackBar2.Value / 100).ToString();
+
         }
 
 

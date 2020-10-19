@@ -275,9 +275,9 @@
             this.label6.Location = new System.Drawing.Point(2398, 696);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(98, 25);
+            this.label6.Size = new System.Drawing.Size(83, 25);
             this.label6.TabIndex = 18;
-            this.label6.Text = "Julia C X";
+            this.label6.Text = "Julia  X";
             // 
             // label7
             // 
@@ -285,9 +285,9 @@
             this.label7.Location = new System.Drawing.Point(2398, 769);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(99, 25);
+            this.label7.Size = new System.Drawing.Size(84, 25);
             this.label7.TabIndex = 19;
-            this.label7.Text = "Julia C Y";
+            this.label7.Text = "Julia  Y";
             // 
             // labelJuliaX
             // 
