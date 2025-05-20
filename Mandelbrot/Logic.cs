@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Mandelbrot
@@ -8,12 +7,15 @@ namespace Mandelbrot
     public static class Logic
     {
         /// <summary>
-        /// Calculate entire Bitmap
+        /// Calculates the Mandelbrot or Julia fractal bitmap based on the provided settings.
         /// </summary>
-        /// <param name="dBitmap"></param>
-        /// <param name="settings"></param>
-        public static async void CalculateBitmap(DirectBitmap dBitmap, SettingsTemplate settings)
+        /// <param name="dBitmap">The DirectBitmap to draw the fractal on.</param>
+        /// <param name="settings">The settings for fractal generation.</param>
+        public static void CalculateBitmap(DirectBitmap dBitmap, SettingsTemplate settings)
         {
+            if (dBitmap == null) throw new ArgumentNullException(nameof(dBitmap));
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+
             try
             {
                 if (settings.fractal == fraktal.Mandelbrot)
@@ -26,93 +28,145 @@ namespace Mandelbrot
                     calculateJulia(dBitmap, settings);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
+                // Re-throw the exception to be caught by the UI layer
+                throw;
             }
         }
-        
+
+        /// <summary>
+        /// Calculates the Mandelbrot set for the given bitmap and settings.
+        /// </summary>
+        /// <param name="dMap">The DirectBitmap to draw on.</param>
+        /// <param name="settings">The fractal settings.</param>
         static void calculateMandelbrot(DirectBitmap dMap, SettingsTemplate settings)
         {
             int zoomValue = settings.zoom * 100;
-            Parallel.For(1, 1048577, ((i) => calculateMandelbrotPixel(dMap, settings, i,zoomValue)));
+            int totalPixels = settings.resulution * settings.resulution;
+            Parallel.For(0, totalPixels, ((i) => calculateMandelbrotPixel(dMap, settings, i, zoomValue)));
         }
+
+        /// <summary>
+        /// Calculates a single pixel for the Mandelbrot set.
+        /// </summary>
+        /// <param name="dMap">The DirectBitmap to draw on.</param>
+        /// <param name="settings">The fractal settings.</param>
+        /// <param name="workerNumber">The index of the pixel to calculate (flattens a 2D grid into 1D).</param>
+        /// <param name="zoom">The pre-calculated zoom factor.</param>
         static private void calculateMandelbrotPixel(DirectBitmap dMap,SettingsTemplate settings,int workerNumber,int zoom)
         {
-            int x = workerNumber / 1024;  // TODO change res to 1024 to use shifts. calculate zoom outside.
-            int y = workerNumber % 1024;
-            // Calulate PixelPosition   
+            int x = workerNumber / settings.resulution;
+            int y = workerNumber % settings.resulution;
+            // Calculate PixelPosition   
             double xwert = ((x - (settings.resulution / 2.0)) / zoom) + (settings.xDifference);
             double ywert = ((y - (settings.resulution / 2.0)) / zoom) + settings.yDifference;
-                       
-            mandelbrot(dMap, xwert, ywert, settings, x, y);
-                    
-
- 
+            
+            int iterations = mandelbrot_iterations(xwert, ywert, settings);
+            dMap.SetPixel(x, y, calculateColor(iterations, settings));
         }
 
+        /// <summary>
+        /// Calculates the Julia set for the given bitmap and settings.
+        /// </summary>
+        /// <param name="dMap">The DirectBitmap to draw on.</param>
+        /// <param name="settings">The fractal settings.</param>
         private static void calculateJulia(DirectBitmap dMap, SettingsTemplate settings)
         {
-            Parallel.For(1, 1048577, ((i) => calculatejuliaPixel(dMap, settings, i)));
+            int totalPixels = settings.resulution * settings.resulution;
+            Parallel.For(0, totalPixels, ((i) => calculatejuliaPixel(dMap, settings, i)));
         }
 
+        /// <summary>
+        /// Calculates a single pixel for the Julia set.
+        /// </summary>
+        /// <param name="dmap">The DirectBitmap to draw on.</param>
+        /// <param name="settings">The fractal settings.</param>
+        /// <param name="workernumber">The index of the pixel to calculate (flattens a 2D grid into 1D).</param>
         public static void calculatejuliaPixel(DirectBitmap dmap, SettingsTemplate settings, int workernumber)
         {
-            int x = workernumber / 1024;  // TODO change res to 1024 to use shifts. calculate zoom outside.
-            int y = workernumber % 1024;
+            int x = workernumber / settings.resulution;
+            int y = workernumber % settings.resulution;
 
             double xwert = ((x - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.xDifference);
             double ywert = ((y - (settings.resulution / 2.0)) / (settings.zoom * 100.0)) + (settings.yDifference);
 
-            julia(dmap, settings, x, y, xwert, ywert);
+            int iterations = julia_iterations(xwert, ywert, settings);
+            dmap.SetPixel(x, y, calculateColor(iterations, settings));
         }
 
-        public static void julia(DirectBitmap dmap, SettingsTemplate settings, int xpixel, int ypixel, double x, double y)
+        /// <summary>
+        /// Calculates the number of iterations for a point in the Julia set.
+        /// </summary>
+        /// <param name="x_val">The initial x-value in the complex plane for the point being tested.</param>
+        /// <param name="y_val">The initial y-value in the complex plane for the point being tested.</param>
+        /// <param name="settings">The fractal settings, including Julia constants (juliaX, juliaY).</param>
+        /// <returns>The number of iterations before escaping, or -1 if it does not escape within the limit.</returns>
+        public static int julia_iterations(double x_val, double y_val, SettingsTemplate settings)
         {
+            double current_x = x_val;
+            double current_y = y_val;
+
             for (int i = 1; i <= settings.iteration; i++)
             {          
-                double xtemp = x;
-                x = (x * x) - (y * y) + settings.juliaX;
+                double xtemp = current_x;
+                current_x = (current_x * current_x) - (current_y * current_y) + settings.juliaX;
+                current_y = 2 * xtemp * current_y + settings.juliaY;
 
-                y = 2 * xtemp * y + settings.juliaY;
-                if (betrag(x, x) > settings.radius)
+                if (betrag(current_x, current_y) > settings.radius)
                 {
-                    dmap.SetPixel(xpixel, ypixel, calculateColor(i, settings));
-                    return;
+                    return i; // Escaped
                 }
             }
-            dmap.SetPixel(xpixel, ypixel, calculateColor(-1, settings));
+            return -1; // Did not escape
         }
 
-        public static void mandelbrot(DirectBitmap dmap, double x, double y, SettingsTemplate settings,int xpixel,int ypixel)
+        /// <summary>
+        /// Calculates the number of iterations for a point in the Mandelbrot set.
+        /// </summary>
+        /// <param name="x_coord">The x-coordinate in the complex plane (c_real).</param>
+        /// <param name="y_coord">The y-coordinate in the complex plane (c_imaginary).</param>
+        /// <param name="settings">The fractal settings.</param>
+        /// <returns>The number of iterations before escaping, or -1 if it does not escape within the limit.</returns>
+        public static int mandelbrot_iterations(double x_coord, double y_coord, SettingsTemplate settings)
         {
-            double xx = 0;
-            double yy = 0;
+            double z_real = 0; 
+            double z_imaginary = 0; 
             for (int i = 1; i <= settings.iteration; i++)
             {
-                double xtemp = xx;
-                xx = (xx * xx) - (yy * yy) + x;
-
-                yy = 2 * xtemp * yy + y;
-                if (betrag(xx, yy) > settings.radius)
+                double xtemp = z_real;
+                z_real = (z_real * z_real) - (z_imaginary * z_imaginary) + x_coord;
+                z_imaginary = 2 * xtemp * z_imaginary + y_coord;    
+                if (betrag(z_real, z_imaginary) > settings.radius)
                 {
-                    dmap.SetPixel(xpixel,ypixel,calculateColor(i,settings));
-                    return;
+                    return i; // Escaped
                 }
             }
-
-            dmap.SetPixel(xpixel, ypixel, calculateColor(-1, settings));
+            return -1; // Did not escape
         }
 
+        /// <summary>
+        /// Calculates the squared magnitude (or modulus) of a complex number represented by (x, y).
+        /// This is equivalent to x^2 + y^2.
+        /// </summary>
+        /// <param name="x">The real part of the complex number.</param>
+        /// <param name="y">The imaginary part of the complex number.</param>
+        /// <returns>The squared magnitude of the complex number.</returns>
         public static double betrag(double x, double y)
         {
             return ((x * x) + (y * y));
         }
 
-        private static Color calculateColor(int i , SettingsTemplate settings)
+        /// <summary>
+        /// Calculates the color of a pixel based on the iteration count.
+        /// </summary>
+        /// <param name="iterations">The iteration count. -1 indicates the point is inside the set.</param>
+        /// <param name="settings">The fractal settings, including color scheme.</param>
+        /// <returns>The color for the pixel.</returns>
+        private static Color calculateColor(int iterations , SettingsTemplate settings)
         {
             // inside
-            if (i == -1)
+            if (iterations == -1)
             {
                 if (settings.innerColor == InnerColor.Black)
                 {
@@ -130,13 +184,16 @@ namespace Mandelbrot
                 switch (settings.colorResulution)
                 {
                     case ColorResulution.Thin:
-                        PixelValue = ((i % 230) * 3) + 50;
+                        PixelValue = ((iterations % 230) * 3) + 50;
                         break;
                     case ColorResulution.Normal:
-                        PixelValue = ((i % 105) * 7) + 20;
+                        PixelValue = ((iterations % 105) * 7) + 20;
                         break;
                     case ColorResulution.Thick:
-                        PixelValue = ((i % 20) * 37) + 20;
+                        PixelValue = ((iterations % 20) * 37) + 20;
+                        break;
+                    default: // Should not happen with enum
+                        PixelValue = ((iterations % 105) * 7) + 20; 
                         break;
                 }
 
@@ -193,11 +250,15 @@ namespace Mandelbrot
                         else
                         {
                             return Color.FromArgb(0, 0, PixelValue);
-                        }                       
+                        }
+                    default:
+                        // This case should ideally not be reached if all enum values are handled.
+                        // Consider logging an error or throwing an exception for unexpected enum values.
+                        throw new ArgumentOutOfRangeException(nameof(settings.fractalColor), $"Unsupported fractal color: {settings.fractalColor}");
                 }
-                return Color.Black;
+                //The following line should be unreachable due to the default case in the switch statement.
+                //return Color.Black; 
             }
         }
-
     }
 }
